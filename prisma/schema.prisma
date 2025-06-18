@@ -1,0 +1,118 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id           String       @id @default(cuid())
+  clerkId      String       @unique
+  name         String
+  topics       Topic[]
+  categories   Category[]
+  emailEntries EmailEntry[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([clerkId])
+}
+
+model Category {
+  id           String                 @id @default(cuid())
+  name         String
+  workspaceId  String
+  workspace    Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  emailEntries CategoryToEmailEntry[]
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+
+  @@index([workspaceId])
+  @@unique([workspaceId, name]) // Prevent duplicate category names per workspace
+}
+
+model EmailEntry {
+  id          String                 @id @default(cuid())
+  email       String
+  name        String?
+  workspaceId String
+  workspace   Workspace              @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  categories  CategoryToEmailEntry[]
+  invitations Invitation[]
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+
+  @@index([workspaceId])
+  @@index([email])
+  @@unique([workspaceId, email]) // Prevent duplicate emails per workspace
+}
+
+// Pivot table for many-to-many relation between Category and EmailEntry
+model CategoryToEmailEntry {
+  category     Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId   String
+  emailEntry   EmailEntry @relation(fields: [emailEntryId], references: [id], onDelete: Cascade)
+  emailEntryId String
+  createdAt    DateTime   @default(now())
+
+  @@id([categoryId, emailEntryId])
+  @@index([categoryId])
+  @@index([emailEntryId])
+}
+
+model Invitation {
+  id           String     @id @default(cuid())
+  emailEntryId String
+  emailEntry   EmailEntry @relation(fields: [emailEntryId], references: [id], onDelete: Cascade)
+  topicId      String
+  topic        Topic      @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  token        String     @unique
+  used         Boolean    @default(false)
+  sentAt       DateTime   @default(now())
+  submittedAt  DateTime?
+  expiresAt    DateTime?  // Consider adding expiration
+  feedback     Feedback[]
+
+  @@index([emailEntryId])
+  @@index([topicId])
+  @@index([token])
+  @@index([used])
+}
+
+model Topic {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  workspaceId String
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  feedbacks   Feedback[]
+  invitations Invitation[]
+  isActive    Boolean      @default(true) // Consider adding status field
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([workspaceId])
+  @@index([isActive])
+}
+
+model Feedback {
+  id           String     @id @default(cuid())
+  content      String
+  invitationId String
+  topicId      String
+  topic        Topic      @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  invitation   Invitation @relation(fields: [invitationId], references: [id], onDelete: Cascade)
+  submittedAt  DateTime   @default(now())
+  rating       Int?       // Consider adding rating field
+  isAnonymous  Boolean    @default(false) // Consider adding anonymity option
+
+  @@index([invitationId])
+  @@index([topicId])
+  @@index([submittedAt])
+}
