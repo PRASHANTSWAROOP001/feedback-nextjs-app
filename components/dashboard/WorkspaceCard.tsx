@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardDescription, CardTitle, CardHeader, CardFooter } from "../ui/card";
+import { Card, CardDescription, CardTitle, CardHeader, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
-import { Pencil, Trash2 } from "lucide-react";
+import {deleteWorkSpace} from "../../app/action/deleteWorkspace"
 
 import { Badge } from "../ui/badge";
 
@@ -20,7 +20,8 @@ async function  handleEdit(id:string) {
 }
 
 async function handleDelete(id:string){
-    console.log(id);
+  console.log(id);
+    await deleteWorkSpace(id);
 }
 
 function WorkspaceCard({ id, name, createdAt}: WorkspaceCardProps) {
