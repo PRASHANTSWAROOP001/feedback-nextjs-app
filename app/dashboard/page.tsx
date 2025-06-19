@@ -18,8 +18,15 @@ export default async function(){
             </aside>
 
             {/* Main content area with padding to account for fixed header */}
-            <div className="pt-20 px-4">
+            <div className="pt-20 px-4 w-full">
                 {/* Your main dashboard content will go here */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full">
+
+                    {data && (<WorkspaceCard createdAt={data?.createdAt} id={data?.id} name={data?.name}></WorkspaceCard>)}
+                     {data && (<WorkspaceCard createdAt={data?.createdAt} id={data?.id} name={data?.name}></WorkspaceCard>)}
+                      {data && (<WorkspaceCard createdAt={data?.createdAt} id={data?.id} name={data?.name}></WorkspaceCard>)}
+                       {data && (<WorkspaceCard createdAt={data?.createdAt} id={data?.id} name={data?.name}></WorkspaceCard>)}
+                </div>
             </div>
         </main>
     )

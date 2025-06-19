@@ -1,7 +1,10 @@
-"use-client";
+"use client";
 import { Button } from "../ui/button";
 import { MenuIcon } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+
 
 function Navbar() {
   const navlinks = [
@@ -16,6 +19,10 @@ function Navbar() {
     { name: "LinkedIn", url: "#" },
     { name: "Discord", url: "#" },
   ];
+
+  const {isSignedIn} = useUser()
+
+  const router = useRouter()
 
   return (
     <header className="w-full sticky top-0 z-50 border-b bg-white/80 backdrop-blur-sm">
@@ -50,9 +57,9 @@ function Navbar() {
               {item.name}
             </a>
           ))}
-          <Button variant="outline" size="sm">
+        {!isSignedIn? (  <Button onClick={()=>router.push("/signin")} variant="outline" size="sm">
             Sign In
-          </Button>
+          </Button>): (<Button onClick={()=>router.push("/dashboard")} variant={"outline"} size={"sm"}>Dashboard</Button>) }
         </div>
       </div>
 
