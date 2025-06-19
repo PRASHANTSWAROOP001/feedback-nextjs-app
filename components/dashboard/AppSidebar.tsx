@@ -1,5 +1,5 @@
 "use client"
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import {Home, Inbox,LaptopMinimal,Signpost,Handshake, NotebookText, Settings} from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { useUser } from "@clerk/nextjs"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel, DropdownMenuGroup , DropdownMenuContent} from "../ui/dropdown-menu"
@@ -22,29 +22,40 @@ import {
 const items = [
   {
     title: "Home",
-    url: "#",
+    url: "/",
     icon: Home,
   },
   {
-    title: "Inbox",
+    title:"Workspace",
+    url:"/dashboard/workspace",
+    icon:LaptopMinimal
+  },
+
+  {
+    title: "Email",
     url: "#",
     icon: Inbox,
   },
   {
-    title: "Calendar",
+    title: "Category",
     url: "#",
-    icon: Calendar,
+    icon: Signpost,
   },
   {
-    title: "Search",
+    title: "Invite",
     url: "#",
-    icon: Search,
+    icon: Handshake,
   },
   {
-    title: "Settings",
+    title: "Feedback",
     url: "#",
-    icon: Settings,
+    icon: NotebookText,
   },
+  {
+    title:"Dashboard",
+    url:"/dashboard",
+    icon:Settings
+  }
 ]
 
 export function AppSidebar() {
