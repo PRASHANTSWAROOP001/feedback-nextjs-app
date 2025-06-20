@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { useState } from "react";
 import {
   Card,
   CardTitle,
@@ -16,6 +15,8 @@ import DeleteWorkspacePopover from "./DeleteWorkspacepop";
 import EditWorkspacePopover from "./WorkspaceEditPop";
 import { Badge } from "../ui/badge";
 import { toast } from "sonner";
+import { useWorkspaceStore } from "@/store/useWorkspaceStore";
+import { useEffect } from "react";
 
 type WorkspaceCardProps = {
   id: string;
@@ -41,6 +42,13 @@ async function handleDelete(id: string) {
 }
 
 function WorkspaceCard({ id, name, createdAt }: WorkspaceCardProps) {
+  const {setWorkspaceId} = useWorkspaceStore()
+
+  useEffect(()=>{
+    console.log("workspaceId", id)
+    setWorkspaceId(id)
+  },[id,setWorkspaceId])
+
   return (
     <Card className="relative w-full m-2 border-2 flex flex-col min-h-full">
       <Badge className="absolute top-2 right-2">
