@@ -12,9 +12,22 @@ async function getAllCategory():Promise<CategoryResponse>{
             return {success:false, message:"user not found"}
         }
 
+        const workspaceId = await prisma.workspace.findUnique({
+            where:{
+                clerkId:userId
+            },
+            select:{
+                id:true
+            }
+        })
+
+        if(!workspaceId){
+            return {success:false, message:"create your workspace first"}
+        }
+
         const findAllCategory = await prisma.category.findMany({
             where:{
-                workspaceId:userId
+                workspaceId:workspaceId.id
             },
             orderBy:{
                 createdAt:"desc"

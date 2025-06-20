@@ -15,9 +15,21 @@ import { CategoryResponse } from "@/types/types";
 
 async function CategoryCard() {
    const categoryResponse:CategoryResponse = await getAllCategory();
-   const categories:Category[]|undefined = categoryResponse?.data
+   const categories:Category[]|undefined = categoryResponse?.data;
 
-   console.log(categoryResponse)
+const possibleVar: ("default" | "secondary" | "destructive" | "outline")[] = [
+  "default",
+  "outline",
+  "destructive",
+  "secondary",
+];
+
+// Function to return a random variant with the correct type
+function randomVar(): "default" | "secondary" | "destructive" | "outline" {
+  const newValue = Math.floor(Math.random() * possibleVar.length);
+  return possibleVar[newValue];
+}
+
   return (
     <Card className="w-full m-2 border-2 flex flex-col min-h-full">
       <CardHeader className="pt-2">
@@ -27,18 +39,16 @@ async function CategoryCard() {
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-4 flex-grow">
+      <CardContent className="flex flex-col gap-4 flex-grow w-full">
         {!categoryResponse.success || !categories || categories.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center">
             <h1 className="text-lg font-semibold mb-2">Create your First Category</h1>
             <Badge>Category</Badge>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
             {categories.map((item) => (
-              <div key={item.id} className="flex justify-center">
-                <Badge className="text-center">{item.name}</Badge>
-              </div>
+                <Badge className="w-full text-center" variant={randomVar()}  id={item.id} key={item.id}>{item.name}</Badge>
             ))}
           </div>
         )}

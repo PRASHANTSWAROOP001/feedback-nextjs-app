@@ -18,7 +18,6 @@ function ReusablePopover() {
     }
      const response = await createCategory(name)// Pass ID and new name
 
-     console.log(response)
     setIsOpen(false); // Close Popover
     if(response.success){
       toast("Category Created");
