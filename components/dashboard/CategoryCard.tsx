@@ -10,26 +10,20 @@ import {
 import { Badge } from "../ui/badge";
 import ReusablePopover from "./AddCategory";
 import { getAllCategory } from "@/app/action/getAllCategory";
-import { Category } from "@/app/generated/prisma"
+import { Category } from "@/app/generated/prisma";
 import { CategoryResponse } from "@/types/types";
 import createCategory from "@/app/action/createCategory";
 
 async function CategoryCard() {
-   const categoryResponse:CategoryResponse = await getAllCategory();
-   const categories:Category[]|undefined = categoryResponse?.data;
+  const categoryResponse: CategoryResponse = await getAllCategory();
+  const categories: Category[] | undefined = categoryResponse?.data;
 
-const possibleVar: ("default" | "secondary" | "destructive" | "outline")[] = [
-  "default",
-  "outline",
-  "destructive",
-  "secondary",
-];
-
-// Function to return a random variant with the correct type
-function randomVar(): "default" | "secondary" | "destructive" | "outline" {
-  const newValue = Math.floor(Math.random() * possibleVar.length);
-  return possibleVar[newValue];
-}
+  const possibleVar: ("default" | "secondary" | "destructive" | "outline")[] = [
+    "default",
+    "outline",
+    "destructive",
+    "secondary",
+  ];
 
   return (
     <Card className="w-full m-2 border-2 flex flex-col min-h-full">
@@ -48,8 +42,15 @@ function randomVar(): "default" | "secondary" | "destructive" | "outline" {
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-            {categories.map((item) => (
-                <Badge className="w-full text-center whitespace-normal break-words" variant={randomVar()}  id={item.id} key={item.id}>{item.name}</Badge>
+            {categories.map((item, index) => (
+              <Badge
+                className="w-full text-center whitespace-normal break-words"
+                variant={possibleVar[index % possibleVar.length]}
+                id={item.id}
+                key={item.id}
+              >
+                {item.name}
+              </Badge>
             ))}
           </div>
         )}
