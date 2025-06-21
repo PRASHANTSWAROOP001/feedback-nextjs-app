@@ -3,6 +3,7 @@ import {findWorkspace} from "../action/checkWorkspace"
 import WorkspaceCard from "@/components/dashboard/WorkspaceCard";
 import CategoryCard from "@/components/dashboard/CategoryCard";
 import TopicCard from "@/components/dashboard/TopicCard";
+import EmailCard from "@/components/dashboard/EmailCard";
 
 export default async function(){
     const {success, message, data} = await findWorkspace()
@@ -27,6 +28,7 @@ export default async function(){
                     {data && (<WorkspaceCard createdAt={data?.createdAt} id={data?.id} name={data?.name}></WorkspaceCard>)}
                        <CategoryCard />
                        <TopicCard/>
+                     {data && (  <EmailCard workspaceId={data.id} />)}
                 </div>
             </div>
         </main>
