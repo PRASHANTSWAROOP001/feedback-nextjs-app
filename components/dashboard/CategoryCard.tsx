@@ -12,6 +12,7 @@ import ReusablePopover from "./AddCategory";
 import { getAllCategory } from "@/app/action/getAllCategory";
 import { Category } from "@/app/generated/prisma"
 import { CategoryResponse } from "@/types/types";
+import createCategory from "@/app/action/createCategory";
 
 async function CategoryCard() {
    const categoryResponse:CategoryResponse = await getAllCategory();
@@ -48,7 +49,7 @@ function randomVar(): "default" | "secondary" | "destructive" | "outline" {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
             {categories.map((item) => (
-                <Badge className="w-full text-center" variant={randomVar()}  id={item.id} key={item.id}>{item.name}</Badge>
+                <Badge className="w-full text-center whitespace-normal break-words" variant={randomVar()}  id={item.id} key={item.id}>{item.name}</Badge>
             ))}
           </div>
         )}
@@ -56,7 +57,7 @@ function randomVar(): "default" | "secondary" | "destructive" | "outline" {
 
       <CardFooter className="flex items-center justify-between pt-4 mt-auto">
         <Button>Manage</Button>
-        <ReusablePopover />
+        <ReusablePopover action_button="Save" actionHanlder={createCategory} />
       </CardFooter>
     </Card>
   );

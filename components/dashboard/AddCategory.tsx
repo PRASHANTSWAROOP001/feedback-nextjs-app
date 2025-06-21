@@ -5,9 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import createCategory from "@/app/action/createCategory";
 
-function ReusablePopover() {
+
+type ResuablePop = {
+  action_button:string,
+  actionHanlder:(name:string)=>Promise<{success:boolean, message:string}>
+}
+
+
+
+function ReusablePopover({action_button,actionHanlder}:ResuablePop) {
   const [isOpen, setIsOpen] = useState(false); // Control Popover visibility
   const [name, setName] = useState(""); // Initialize with current name
 
@@ -16,7 +23,7 @@ function ReusablePopover() {
       toast("Error");
       return;
     }
-     const response = await createCategory(name)// Pass ID and new name
+     const response = await actionHanlder(name)// Pass ID and new name
 
     setIsOpen(false); // Close Popover
     if(response.success){
@@ -51,7 +58,7 @@ function ReusablePopover() {
               No
             </Button>
             <Button onClick={()=>onSave()} variant="default">
-                Save
+                {action_button}
             </Button>
           </div>
         </div>
