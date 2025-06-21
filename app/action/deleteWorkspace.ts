@@ -1,5 +1,6 @@
 "use server"
 import {prisma} from "../../lib/prisma"
+import { revalidatePath } from "next/cache";
 
 
 export async function deleteWorkSpace(id:string):Promise<{success:boolean, message:string}> {
@@ -24,6 +25,9 @@ export async function deleteWorkSpace(id:string):Promise<{success:boolean, messa
                 id:id
             }
         })
+
+        revalidatePath("/dashboard")
+        
 
         return {success:true, message:"deleted successfully"}
 

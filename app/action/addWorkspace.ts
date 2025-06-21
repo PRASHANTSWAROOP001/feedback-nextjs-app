@@ -2,7 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server"
 import {prisma }from "../../lib/prisma"
-
+import { revalidatePath } from "next/cache";
 
 
 export async function addWorkspace(formdata:FormData){
@@ -22,8 +22,9 @@ export async function addWorkspace(formdata:FormData){
         }
     })
 
+    revalidatePath("/dashboard");
     return {success:true, data:response}
-
+    
    } catch (error) {
     console.error("error happend:", error);
     return {success:false, message:"Error ouccured"}

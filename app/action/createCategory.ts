@@ -1,6 +1,7 @@
 "use server"
 import {prisma} from "../../lib/prisma"
 import { auth } from "@clerk/nextjs/server"
+import { revalidatePath } from "next/cache"
 
 
 async function createCategory(name:string):Promise<{success:boolean, message:string}>{
@@ -31,6 +32,8 @@ async function createCategory(name:string):Promise<{success:boolean, message:str
                 workspaceId:findWorkspace.id
             }
         })
+
+        revalidatePath("/dashboard")
 
         return {success:true, message:"created category"}
 

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-
+import { useRouter } from "next/navigation";
 
 type ResuablePop = {
   action_button:string,
@@ -17,6 +17,7 @@ type ResuablePop = {
 function ReusablePopover({action_button,actionHanlder}:ResuablePop) {
   const [isOpen, setIsOpen] = useState(false); // Control Popover visibility
   const [name, setName] = useState(""); // Initialize with current name
+  const router = useRouter()
 
   const onSave = async () => {
     if (!name.trim()) {
@@ -28,6 +29,7 @@ function ReusablePopover({action_button,actionHanlder}:ResuablePop) {
     setIsOpen(false); // Close Popover
     if(response.success){
       toast("Category Created");
+      router.refresh()
     }
     else{
       toast("Error while creating category");
