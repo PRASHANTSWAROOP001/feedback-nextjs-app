@@ -7,26 +7,21 @@ export default function CategoryPage() {
   return (
     <main className="w-full min-h-screen relative">
       {/* Fixed Title */}
-      <div>
-        <div className="fixed top-4 left-1/2 transform -translate-x-1/2 text-4xl z-10">
-          <h1>Categories</h1>
+      <div className="sticky top-0 z-20 bg-white  pb-4">
+        <div className="flex justify-between items-center px-4 pt-4">
+          <h1 className="text-3xl font-bold">Categories</h1>
+          <ReusablePopover actionHanlder={createCategory} action_button="Save" />
         </div>
-
-        {/* Fixed Button */}
-        <aside className="fixed md:top-4 top-16 right-4 z-20">
-          <ReusablePopover actionHanlder={createCategory} action_button="Save"></ReusablePopover>
-        </aside>
+        <div className="px-4 mt-4 max-w-xl mx-auto">
+          <SearchInput />
+        </div>
       </div>
 
-      {/* Fixed Search Input */}
-      <div className="fixed md:top-32 top-36 left-1/2 transform -translate-x-1/2 w-full max-w-xl z-10">
-        <SearchInput />
-      </div>
-
-      {/* Main Content should have top padding to avoid overlapping */}
-      <div className="pt-45 px-4"> {/* Adjust pt (padding-top) as needed */}
+      {/* Scrollable Area With Enough Padding */}
+      <div className="px-4">
         <CategoryPageDisplay />
       </div>
     </main>
   )
 }
+

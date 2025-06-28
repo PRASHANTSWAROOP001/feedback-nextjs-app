@@ -1,67 +1,55 @@
-"use client"
 import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
-type ResuablePop = {
-  action_button:string,
-  actionHanlder:(name:string)=>Promise<{success:boolean, message:string}>
+interface EditPopover{
+    id:string,
+    currentName:string,
+    handleEdit: (id:string, name:string)=> void
 }
 
-
-
-function ReusablePopover({action_button,actionHanlder}:ResuablePop) {
+function EditCategoryPopover({ id, currentName, handleEdit}:EditPopover) {
   const [isOpen, setIsOpen] = useState(false); // Control Popover visibility
-  const [name, setName] = useState(""); // Initialize with current name
-  const router = useRouter()
+  const [name, setName] = useState(currentName || ""); // Initialize with current name
 
-  const onSave = async () => {
+  const onSave = () => {
     if (!name.trim()) {
       toast("Error");
       return;
     }
-     const response = await actionHanlder(name)// Pass ID and new name
-
+    handleEdit(id, name); // Pass ID and new name
     setIsOpen(false); // Close Popover
-    if(response.success){
-      toast("Category Created");
-      setName("")
-      router.refresh()
-    }
-    else{
-      toast("Error while creating category");
-    }
+    toast("Workspace Updated");
   };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button variant="secondary" size="lg">
-          Create
+          Edit
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none pb-1">Add Category</h4>
-            <Label htmlFor="category-name">Category Name</Label>
+            <h4 className="font-medium leading-none">Edit Category</h4>
+            <Label htmlFor="category-name"> Name</Label>
             <Input
               id="category-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Enter Category name"
+              placeholder="Enter updated category"
             />
           </div>
           <div className="space-y-2 pt-2 flex justify-between items-center">
             <Button variant="outline" onClick={() => setIsOpen(false)}>
               No
             </Button>
-            <Button onClick={()=>onSave()} variant="default">
-                {action_button}
+            <Button variant="default" onClick={onSave}>
+              Save
             </Button>
           </div>
         </div>
@@ -70,4 +58,4 @@ function ReusablePopover({action_button,actionHanlder}:ResuablePop) {
   );
 }
 
-export default ReusablePopover;
+export default EditCategoryPopover;

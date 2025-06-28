@@ -5,6 +5,10 @@ import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { useWorkspaceStore } from "@/store/useWorkspaceStore"
 import { toast } from "sonner"
+import deleteCategory from "@/app/action/category/deleteCategory"
+import editCategory from "@/app/action/category/editCategory"
+import EditCategoryPopover from "./editCategoryPopover"
+import DeleteCategoryPopover from "./deleteCategoryPopover"
 
 export default function CategoryPageDisplay() {
   const searchParams = useSearchParams()
@@ -13,17 +17,17 @@ export default function CategoryPageDisplay() {
   const [loading, setLoading] = useState(true)
   const [categories, setCategories] = useState([])
   const [totalPages, setTotalPages] = useState(1)
-  const {workspaceId} = useWorkspaceStore()
+  const { workspaceId } = useWorkspaceStore()
 
   useEffect(() => {
     const fetchCategories = async () => {
       setLoading(true)
       try {
-        if(!workspaceId){
-            toast("missing workspace id")
-            return;
+        if (!workspaceId) {
+          toast("Missing workspace ID")
+          return
         }
-        
+
         const res = await fetch(
           `/api/category?q=${query}&page=${page}&limit=10&workspaceId=${workspaceId}`
         )
@@ -41,19 +45,31 @@ export default function CategoryPageDisplay() {
   }, [query, page, workspaceId])
 
   return (
-    <div className="p-4">
+    <div className="p-4 max-w-3xl mx-auto w-full">
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-center text-gray-500">Loading...</p>
       ) : categories.length === 0 ? (
-        <p>No categories found.</p>
+        <p className="text-center text-gray-500">No categories found.</p>
       ) : (
-        <ul className="space-y-2">
+        <ul className="space-y-4">
           {categories.map((cat: any) => (
             <li
               key={cat.id}
-              className="p-3 rounded border border-gray-300 shadow-sm"
+              className="p-4 rounded border border-gray-300 shadow-sm flex justify-between items-center flex-wrap gap-y-2"
             >
-              {cat.name}
+              <span className="text-lg font-medium text-gray-800">{cat.name}</span>
+
+              <div className="flex gap-x-2">
+                <EditCategoryPopover
+                  currentName={cat.name}
+                  handleEdit={editCategory}
+                  id={cat.id}
+                />
+                <DeleteCategoryPopover
+                  handleDelete={deleteCategory}
+                  id={cat.id}
+                />
+              </div>
             </li>
           ))}
         </ul>
