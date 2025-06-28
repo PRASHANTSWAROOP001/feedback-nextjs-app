@@ -42,8 +42,6 @@ export default function CategoryPageDisplay() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl mb-4">Categories</h1>
-
       {loading ? (
         <p>Loading...</p>
       ) : categories.length === 0 ? (
@@ -60,8 +58,6 @@ export default function CategoryPageDisplay() {
           ))}
         </ul>
       )}
-
-      {/* Optional: Add pagination controls */}
     </div>
   )
 }
