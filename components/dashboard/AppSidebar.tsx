@@ -33,12 +33,12 @@ const items = [
 
   {
     title: "Email",
-    url: "#",
+    url: "/dashboard/email",
     icon: Inbox,
   },
   {
     title: "Category",
-    url: "#",
+    url: "/dashboard/category",
     icon: Signpost,
   },
   {

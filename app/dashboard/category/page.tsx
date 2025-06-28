@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button"
 import SearchInput from "@/components/category/seachbar"
 import CategoryPageDisplay from "@/components/category/categoryResult"
 import createCategory from "@/app/action/createCategory"
