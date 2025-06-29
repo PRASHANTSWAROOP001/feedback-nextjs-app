@@ -29,6 +29,7 @@ async function getAllCategory():Promise<CategoryResponse>{
             where:{
                 workspaceId:workspaceId.id
             },
+            take:6,
             orderBy:{
                 createdAt:"desc"
             }

@@ -31,7 +31,8 @@ async function getAllTopics():Promise<TopicResponse>{
         const topicData = await prisma.topic.findMany({
             where:{
                 workspaceId:findWorkspaceId.id
-            }
+            },
+            take:6
         })
 
         return {success:true, message:"fetched", data:topicData}
