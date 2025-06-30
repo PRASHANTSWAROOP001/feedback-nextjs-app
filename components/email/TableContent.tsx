@@ -1,68 +1,76 @@
-"use client"
-import { useState, useEffect } from "react"
-import { useSearchParams } from "next/navigation"
-import axios from "axios"
-import { toast } from "sonner"
+"use client";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import axios from "axios";
+import { toast } from "sonner";
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow, 
+  TableRow,
   TableCaption,
-  TableFooter
-} from "../ui/table"
+  TableFooter,
+} from "../ui/table";
 
-import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "../ui/pagination"
-import { Button } from "../ui/button"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../ui/pagination";
+import { Button } from "../ui/button";
 
 export default function EmailTabel() {
-  const searchParams = useSearchParams()
-  const query = searchParams.get("q") || ""
-  const page = parseInt(searchParams.get("page") || "1")
-  const workspaceId = searchParams.get("workspaceId")
-  const categoryId = searchParams.get("categoryId")
-  const [loading, setLoading] = useState<boolean>(true)
-  const [email, setEmail] = useState<any[]>([])
-  const [totalPages, setTotalPages] = useState<number>(1)
+  const searchParams = useSearchParams();
+  const query = searchParams.get("q") || "";
+  const page = parseInt(searchParams.get("page") || "1");
+  const workspaceId = searchParams.get("workspaceId");
+  const categoryId = searchParams.get("categoryId");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [email, setEmail] = useState<any[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {
     const fetchEmails = async () => {
-      setLoading(true)
-      console.log("started fetching")
+      setLoading(true);
+      console.log("started fetching");
       try {
         if (!workspaceId || !categoryId) {
-          toast("missing workspaceId and categoryId in url")
-          return
+          toast("missing workspaceId and categoryId in url");
+          return;
         }
 
         const result = await axios.get(
           `/api/email?q=${query}&page=${page}&limit=10&workspaceId=${workspaceId}&categoryId=${categoryId}`
-        )
-        console.log(result)
+        );
+        console.log(result);
         if (result.status == 200) {
-          setEmail(result.data?.emails || [])
-          setTotalPages(result.data?.totalPages || 1)
-          toast("data fetched successfully")
+          setEmail(result.data?.emails || []);
+          setTotalPages(result.data?.totalPages || 1);
+          toast("data fetched successfully");
         }
       } catch (error) {
-        console.error("error happened while fetching the emails", error)
-        toast("error happened at email table")
+        console.error("error happened while fetching the emails", error);
+        toast("error happened at email table");
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchEmails()
-  }, [workspaceId, categoryId, query, page])
+    fetchEmails();
+  }, [workspaceId, categoryId, query, page]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <h1 className="text-xl font-semibold">Loading...</h1>
       </div>
-    )
+    );
   }
 
   console.log("emails at useState", email);
@@ -112,49 +120,67 @@ export default function EmailTabel() {
               </TableRow>
             )}
           </TableBody>
-         <TableFooter>
-  <TableRow>
-    <TableCell colSpan={5}>
-      <div className="flex justify-center py-4">
-        <Pagination>
-          <PaginationContent>
-            <PaginationItem>
-              <PaginationPrevious
-                className={page <= 1 ? "pointer-events-none opacity-50" : ""}
-                onClick={() => {
-                  if (page > 1) {
-                    const newPage = page - 1
-                    const params = new URLSearchParams(searchParams.toString())
-                    params.set("page", String(newPage))
-                    window.history.pushState({}, "", `?${params.toString()}`)
-                  }
-                }}
-              />
-            </PaginationItem>
-            <div className="px-4 text-sm text-muted-foreground">
-              Page {page} of {totalPages}
-            </div>
-            <PaginationItem>
-              <PaginationNext
-                className={page >= totalPages ? "pointer-events-none opacity-50" : ""}
-                onClick={() => {
-                  if (page < totalPages) {
-                    const newPage = page + 1
-                    const params = new URLSearchParams(searchParams.toString())
-                    params.set("page", String(newPage))
-                    window.history.pushState({}, "", `?${params.toString()}`)
-                  }
-                }}
-              />
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
-      </div>
-    </TableCell>
-  </TableRow>
-</TableFooter>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={5}>
+                <div className="flex justify-center py-4">
+                  <Pagination>
+                    <PaginationContent>
+                      <PaginationItem>
+                        <PaginationPrevious
+                          className={
+                            page <= 1 ? "pointer-events-none opacity-50" : ""
+                          }
+                          onClick={() => {
+                            if (page > 1) {
+                              const newPage = page - 1;
+                              const params = new URLSearchParams(
+                                searchParams.toString()
+                              );
+                              params.set("page", String(newPage));
+                              window.history.pushState(
+                                {},
+                                "",
+                                `?${params.toString()}`
+                              );
+                            }
+                          }}
+                        />
+                      </PaginationItem>
+                      <div className="px-4 text-sm text-muted-foreground">
+                        Page {page} of {totalPages}
+                      </div>
+                      <PaginationItem>
+                        <PaginationNext
+                          className={
+                            page >= totalPages
+                              ? "pointer-events-none opacity-50"
+                              : ""
+                          }
+                          onClick={() => {
+                            if (page < totalPages) {
+                              const newPage = page + 1;
+                              const params = new URLSearchParams(
+                                searchParams.toString()
+                              );
+                              params.set("page", String(newPage));
+                              window.history.pushState(
+                                {},
+                                "",
+                                `?${params.toString()}`
+                              );
+                            }
+                          }}
+                        />
+                      </PaginationItem>
+                    </PaginationContent>
+                  </Pagination>
+                </div>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       </div>
     </div>
-  )
+  );
 }
