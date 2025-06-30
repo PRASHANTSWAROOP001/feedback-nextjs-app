@@ -6,6 +6,7 @@ import { CategoryResponse } from "../../../types/types";
 import { getAllCategory } from "@/app/action/getAllCategory";
 import UploadEmailCard from "@/components/email/UploadCard";
 import SearchBarWithInput from "@/components/email/SearchBarWithInputBox";
+import EmailTabel from "@/components/email/TableContent";
 
 export default async function EmailPage() {
   const categoryResponse: CategoryResponse = await getAllCategory();
@@ -17,7 +18,7 @@ export default async function EmailPage() {
     })) ?? [];
 
   return (
-    <main className="w-full h-screen relative border-2">
+    <main className="w-full h-screen relative">
       <div className="sticky top-0 z-20 bg-white  pb-4">
         <div className="flex justify-between items-center px-4 pt-4">
           <h1 className="text-3xl font-bold">Email</h1>
@@ -37,6 +38,10 @@ export default async function EmailPage() {
         <SearchBarWithInput selectCategory={categoriesName}></SearchBarWithInput>
 
       </div>
+
+      <EmailTabel>
+
+      </EmailTabel>
     </main>
   );
 }

@@ -118,23 +118,23 @@ export async function GET(req: NextRequest) {
     const workspaceId = searchParams.get("workspaceId")
 
     if (limit > 10) {
-      NextResponse.json({ error: "limit cant be greater than 10" }, { status: 401 })
+     return NextResponse.json({ error: "limit cant be greater than 10" }, { status: 401 })
     }
 
     const skip = (page - 1) * limit;
 
     if (!workspaceId) {
-      NextResponse.json({ error: "missing workspaceId param" }, { status: 400 })
+     return NextResponse.json({ error: "missing workspaceId param" }, { status: 400 })
     }
 
     if (!categoryId) {
-      NextResponse.json({ error: "missing categoryId" }, { status: 400 })
+      return NextResponse.json({ error: "missing categoryId" }, { status: 400 })
     }
 
 
     const where: any = {
       workspaceId,
-      catgories: {
+      categories: {
         some: {
           categoryId
         }
@@ -166,7 +166,7 @@ export async function GET(req: NextRequest) {
       prisma.emailEntry.count({ where: where })
     ])
 
-    NextResponse.json({
+    return NextResponse.json({
       emails,
       total: count,
       page,
@@ -175,7 +175,7 @@ export async function GET(req: NextRequest) {
 
   } catch (error) {
     console.error("error happend while getting emails + category", error)
-    NextResponse.json({ error: "error happend" }, { status: 500 })
+    return NextResponse.json({ error: "error happend" }, { status: 500 })
   }
 }
 
