@@ -1,7 +1,12 @@
+"use client"
 import SearchInput from "@/components/category/seachbar"
-import CategoryPageDisplay from "@/components/category/categoryResult"
 import createCategory from "@/app/action/createCategory"
 import ReusablePopover from "@/components/dashboard/AddCategory"
+import PaginatedList from "@/components/category/PaginatedList"
+import EditCategoryPopover from "@/components/category/editCategoryPopover"
+import DeleteCategoryPopover from "@/components/category/deleteCategoryPopover"
+import deleteCategory from "@/app/action/category/deleteCategory"
+import editCategory from "@/app/action/category/editCategory"
 export default function CategoryPage() {
   return (
     <main className="w-full min-h-screen relative">
@@ -18,7 +23,28 @@ export default function CategoryPage() {
 
       {/* Scrollable Area With Enough Padding */}
       <div className="px-4">
-        <CategoryPageDisplay />
+        <PaginatedList fetchUrl="/api/category"  queryKey="category"  renderItem={(cat: any) => (
+        <li
+          key={cat.id}
+          className="p-4 rounded border border-gray-300 shadow-sm flex justify-between items-center flex-wrap gap-y-2"
+        >
+          <span className="text-lg font-medium text-gray-800">
+            {cat.name}
+          </span>
+          <div className="flex gap-x-2">
+            <EditCategoryPopover
+              currentName={cat.name}
+              handleEdit={editCategory}
+              id={cat.id}
+            />
+            <DeleteCategoryPopover
+              handleDelete={deleteCategory}
+              id={cat.id}
+            />
+          </div>
+        </li>
+      )}
+    />
       </div>
     </main>
   )

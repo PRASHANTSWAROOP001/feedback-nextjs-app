@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "../../../lib/prisma"
 
 
-async function GET(req: NextRequest) {
+export async function GET(req: NextRequest) {
     try {
 
         const { searchParams } = req.nextUrl;
@@ -46,7 +46,7 @@ async function GET(req: NextRequest) {
             prisma.topic.count({ where })
         ])
 
-        NextResponse.json({
+        return NextResponse.json({
             success: true,
             message: "data fetched sucessfully",
             data: topics,
