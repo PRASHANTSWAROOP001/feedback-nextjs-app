@@ -10,7 +10,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  TableCaption,
   TableFooter,
 } from "../ui/table";
 
@@ -78,7 +77,7 @@ export default function EmailTabel() {
   console.log("emails at useState", email);
 
   return (
-    <div className="flex justify-center items-center min-h-screen p-4">
+    <div className="flex justify-center items-center  mt-20 p-4">
       <div className="w-full max-w-4xl overflow-x-auto border rounded-2xl shadow-md">
         <Table>
           <TableHeader>

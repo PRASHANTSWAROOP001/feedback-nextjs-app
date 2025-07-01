@@ -6,7 +6,7 @@ import { TopicResponse } from "@/types/types";
 
 
 
-async function getAllTopics():Promise<TopicResponse>{
+async function getAllTopics(limit?:number):Promise<TopicResponse>{
     try {
         
         const {userId} = await auth()
@@ -32,7 +32,7 @@ async function getAllTopics():Promise<TopicResponse>{
             where:{
                 workspaceId:findWorkspaceId.id
             },
-            take:6
+            ...(limit && {take:limit})
         })
 
         return {success:true, message:"fetched", data:topicData}

@@ -1,5 +1,5 @@
 "use client"
-import {Home, Inbox,LaptopMinimal,Signpost,Handshake, NotebookText, Settings} from "lucide-react"
+import {Home, Inbox,LaptopMinimal,Signpost,Handshake, NotebookText, Settings, ScrollText} from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { useUser } from "@clerk/nextjs"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel, DropdownMenuGroup , DropdownMenuContent} from "../ui/dropdown-menu"
@@ -26,9 +26,9 @@ const items = [
     icon: Home,
   },
   {
-    title:"Workspace",
-    url:"/dashboard/workspace",
-    icon:LaptopMinimal
+    title:"Topic",
+    url:"/dashboard/topic",
+    icon:ScrollText
   },
 
   {

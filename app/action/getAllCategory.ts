@@ -3,7 +3,7 @@ import {prisma} from "../../lib/prisma"
 import { auth } from "@clerk/nextjs/server"
 import {CategoryResponse} from "../../types/types"
 
-async function getAllCategory():Promise<CategoryResponse>{
+async function getAllCategory(limit?:number):Promise<CategoryResponse>{
     try {
 
         const {userId} = await auth();
@@ -31,7 +31,8 @@ async function getAllCategory():Promise<CategoryResponse>{
             },
             orderBy:{
                 createdAt:"desc"
-            }
+            },
+            ...(limit && {take:limit})
         })
 
         if(!findAllCategory){

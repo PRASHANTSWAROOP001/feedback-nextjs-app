@@ -15,6 +15,7 @@ import { Category } from "@/app/generated/prisma"
 import {CategoryResponse} from "../../types/types"
 import { getAllCategory } from "@/app/action/getAllCategory";
 import addEmail from "@/app/action/addEmail";
+import RouteManageButton from "./ManageButton";
 
 
 type EmailCardProp = {
@@ -52,7 +53,7 @@ async function EmailCard({workspaceId}:EmailCardProp){
       </CardContent>
 
       <CardFooter className="flex items-center justify-between pt-4 mt-auto">
-        <Button>Manage</Button>
+        <RouteManageButton buttonName="Manage" routeAddress="/dashboard/email"></RouteManageButton>
         <EmailPopover  action_button="Save" actionHanlder={addEmail} selectOptions={categoriesName} workspaceId={workspaceId} ></EmailPopover>
 
       </CardFooter>

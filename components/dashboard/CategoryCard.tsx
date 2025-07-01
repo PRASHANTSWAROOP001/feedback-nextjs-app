@@ -1,4 +1,4 @@
-import { Grid2x2Check } from "lucide-react";
+import { Grid2x2Check, Route } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -13,9 +13,10 @@ import { getAllCategory } from "@/app/action/getAllCategory";
 import { Category } from "@/app/generated/prisma";
 import { CategoryResponse } from "@/types/types";
 import createCategory from "@/app/action/createCategory";
+import RouteManageButton from "./ManageButton";
 
 async function CategoryCard() {
-  const categoryResponse: CategoryResponse = await getAllCategory();
+  const categoryResponse: CategoryResponse = await getAllCategory(6);
   const categories: Category[] | undefined = categoryResponse?.data;
 
   const possibleVar: ("default" | "secondary" | "destructive" | "outline")[] = [
@@ -57,7 +58,7 @@ async function CategoryCard() {
       </CardContent>
 
       <CardFooter className="flex items-center justify-between pt-4 mt-auto">
-        <Button>Manage</Button>
+        <RouteManageButton buttonName="Manage" routeAddress="/dashboard/category"></RouteManageButton>
         <ReusablePopover action_button="Save" actionHanlder={createCategory} />
       </CardFooter>
     </Card>
