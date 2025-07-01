@@ -14,7 +14,6 @@ async function updateEmail(emailId: string, newEmail: string): Promise<{ success
       return { success: false, message: "Missing emailId or newEmail" }
     }
 
-    // ✅ Zod validation
     const parseResult = emailSchema.safeParse({ email: newEmail })
 
     if (!parseResult.success) {

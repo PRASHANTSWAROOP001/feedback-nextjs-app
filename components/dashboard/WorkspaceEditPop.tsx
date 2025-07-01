@@ -8,10 +8,11 @@ import { toast } from "sonner";
 interface EditPopover{
     id:string,
     currentName:string,
+    editAttribute:string,
     handleEdit: (id:string, name:string)=> void
 }
 
-function EditWorkspacePopover({ id, currentName, handleEdit}:EditPopover) {
+function EditWorkspacePopover({ id, currentName,editAttribute, handleEdit}:EditPopover) {
   const [isOpen, setIsOpen] = useState(false); // Control Popover visibility
   const [name, setName] = useState(currentName || ""); // Initialize with current name
 
@@ -35,13 +36,13 @@ function EditWorkspacePopover({ id, currentName, handleEdit}:EditPopover) {
       <PopoverContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <h4 className="font-medium leading-none">Edit Workspace</h4>
-            <Label htmlFor="workspace-name">Workspace Name</Label>
+            <h4 className="font-medium leading-none">Edit {editAttribute}</h4>
+            <Label htmlFor={`${editAttribute}-name`}>{editAttribute} Name</Label>
             <Input
-              id="workspace-name"
+              id={`${editAttribute}-name`}
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Enter workspace name"
+              placeholder={`Edit ${editAttribute}`}
             />
           </div>
           <div className="space-y-2 pt-2 flex justify-between items-center">

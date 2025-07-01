@@ -68,6 +68,7 @@ function WorkspaceCard({ id, name, createdAt }: WorkspaceCardProps) {
 
       <CardFooter className="flex items-center justify-between mt-auto">
         <EditWorkspacePopover
+        editAttribute="Workspace"
           currentName={name}
           id={id}
           handleEdit={handleEdit}

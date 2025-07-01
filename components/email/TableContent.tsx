@@ -23,8 +23,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
-import { Button } from "../ui/button";
-
+import updateEmail from "@/app/action/email/updateEmail";
+import DeleteWorkspacePopover from "../dashboard/DeleteWorkspacepop";
+import deleteEmail from "@/app/action/email/deleteEmail";
+import EditWorkspacePopover from "../dashboard/WorkspaceEditPop";
 export default function EmailTabel() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
@@ -103,12 +105,8 @@ export default function EmailTabel() {
                       : "—"}
                   </TableCell>
                   <TableCell className="text-right space-x-2">
-                    <Button size="sm" variant="outline">
-                      Edit
-                    </Button>
-                    <Button size="sm" variant="destructive">
-                      Delete
-                    </Button>
+                    <EditWorkspacePopover currentName={item.email} editAttribute="Email" id={item.id} handleEdit={updateEmail}></EditWorkspacePopover>
+                    <DeleteWorkspacePopover id={item.id} handleDelete={deleteEmail}></DeleteWorkspacePopover>
                   </TableCell>
                 </TableRow>
               ))
