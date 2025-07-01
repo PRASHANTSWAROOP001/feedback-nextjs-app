@@ -99,6 +99,7 @@ model Topic {
 
   @@index([workspaceId])
   @@index([isActive])
+  @@index([title])
 }
 
 model Feedback {

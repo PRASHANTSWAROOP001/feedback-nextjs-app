@@ -12,7 +12,7 @@ export default function CategoryPage() {
           <ReusablePopover actionHanlder={createCategory} action_button="Save" />
         </div>
         <div className="px-4 mt-4 max-w-xl mx-auto">
-          <SearchInput />
+          <SearchInput baseUrl="/dashboard/category" placeholder="Search Category ..." />
         </div>
       </div>
 
