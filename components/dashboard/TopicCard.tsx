@@ -13,6 +13,7 @@ import createTopic from "@/app/action/createTopic";
 import getAllTopics from "@/app/action/getAllTopic";
 import { Topic } from "@/app/generated/prisma";
 import { TopicResponse } from "@/types/types";
+import RouteManageButton from "./ManageButton";
 async function TopicCard(){
 
   const topicResponse:TopicResponse = await getAllTopics()
@@ -50,7 +51,7 @@ async function TopicCard(){
       </CardContent>
 
       <CardFooter className="flex items-center justify-between pt-4 mt-auto">
-        <Button>Manage</Button>
+        <RouteManageButton buttonName="Manage" routeAddress="/dashboard/topic"></RouteManageButton>
         <TopicPopover action_button="save" actionHanlder={createTopic} ></TopicPopover>
 
       </CardFooter>

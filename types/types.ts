@@ -1,4 +1,4 @@
-import { Category, Topic } from "@/app/generated/prisma"
+import { Category, Topic, EmailEntry } from "@/app/generated/prisma"
 
 export type CategoryResponse = {
     success:boolean,
@@ -13,4 +13,10 @@ export type TopicResponse = {
     data?: Topic[]
 }
 
+
+export type EmailResponse = {
+    success:boolean,
+    message:string,
+    data?:EmailEntry[]
+}
 

@@ -11,12 +11,13 @@ import {
 import { Badge } from "../ui/badge";
 
 import EmailPopover from "./EmailPopover";
-import { Category } from "@/app/generated/prisma"
+import { Category, EmailEntry } from "@/app/generated/prisma"
 import {CategoryResponse} from "../../types/types"
 import { getAllCategory } from "@/app/action/getAllCategory";
 import addEmail from "@/app/action/addEmail";
 import RouteManageButton from "./ManageButton";
-
+import { EmailResponse } from "../../types/types";
+import getLatestEmails from "@/app/action/getLatestAddedEmails";
 
 type EmailCardProp = {
     workspaceId:string
@@ -28,6 +29,20 @@ async function EmailCard({workspaceId}:EmailCardProp){
    const categories:Category[]|undefined = categoryResponse?.data;
    const categoriesName: string[] = categories?.map(item => item.name) ?? [];
 
+   const emailResponse:EmailResponse = await getLatestEmails(workspaceId)
+   const emailData:EmailEntry[]|undefined = emailResponse?.data;
+   const emailIdData:{email:string, id:string}[] = emailData?.map((val)=>({
+    email:val.email,
+    id:val.id
+   })) ?? []
+
+    const possibleVar: ("default" | "secondary" | "destructive" | "outline")[] = [
+    "default",
+    "outline",
+    "destructive",
+    "secondary",
+  ];
+
     return(
         <Card className="w-full m-2 border-2 flex flex-col min-h-full">
       <CardHeader className="pt-2">
@@ -38,18 +53,18 @@ async function EmailCard({workspaceId}:EmailCardProp){
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4 flex-grow w-full">
-        {/* {!topicResponse.success || !topicData|| topicData.length === 0 ? (
+        {!emailResponse.success || !emailData|| emailIdData.length === 0 ? (
           <div className="flex flex-col items-center justify-center text-center">
-            <h1 className="text-lg font-semibold mb-2">Create your First Category</h1>
+            <h1 className="text-lg font-semibold mb-2">Add Your First Email</h1>
             <Badge>topic</Badge>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-            {topicData.map((item) => (
-                <Badge className="w-full text-center" variant={randomVar()}  id={item.id} key={item.id}>{item.title}</Badge>
+          <div className="grid grid-cols-1  gap-4 w-full">
+            {emailIdData.map((item, index) => (
+                <Badge className="w-full text-center" variant={possibleVar[index%possibleVar.length]}  id={item.id} key={item.id}>{item.email}</Badge>
             ))}
           </div>
-        )} */}
+        )}
       </CardContent>
 
       <CardFooter className="flex items-center justify-between pt-4 mt-auto">
