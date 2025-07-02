@@ -1,17 +1,17 @@
 import Navbar from "@/components/shared/navbar";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Check, ArrowRight } from "lucide-react";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { HowItWorksSection } from "@/components/landingPage/HowItWorks";
 import { ReviewSection } from "@/components/landingPage/Review";
+import Pricing from "@/components/landingPage/Pricing";
 export default function Home() {
   return (
     <div>
       <Navbar></Navbar>
-      <section className="w-full py-12 md:py-24 lg:py-28 h-screen">
+      <section id='home' className="w-full py-12 md:py-24 lg:py-28 h-screen">
         <AnimatedGridPattern
           numSquares={50}
           maxOpacity={0.1}
@@ -51,7 +51,7 @@ export default function Home() {
       </section>
       <HowItWorksSection></HowItWorksSection>
       <ReviewSection></ReviewSection>
-      <h1>Home page </h1>
+      <Pricing></Pricing>
     </div>
   );
 }

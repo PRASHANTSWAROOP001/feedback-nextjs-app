@@ -1,6 +1,6 @@
 
 import { Marquee } from "@/components/magicui/marquee";
- 
+import { VelocityScroll } from "../magicui/scroll-based-velocity"; 
 const reviews = [
   {
     name: "Ravi Sharma",
@@ -43,6 +43,7 @@ const reviews = [
 const firstRow = reviews.slice(0, Math.ceil(reviews.length / 2));
 const secondRow = reviews.slice(Math.ceil(reviews.length / 2));
 
+
 const ReviewCard = ({
   img,
   name,
@@ -75,7 +76,7 @@ const ReviewCard = ({
 
 export function ReviewSection() {
   return (
-    <section className="w-full py-16 bg-background">
+    <section id='review' className="w-full py-16 bg-background">
       <div className="container max-w-4xl mx-auto px-4 md:px-6 text-center space-y-4 mb-10">
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
           Hear What Others Are Saying
