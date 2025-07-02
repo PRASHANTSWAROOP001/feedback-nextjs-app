@@ -6,6 +6,7 @@ import { Check, ArrowRight } from "lucide-react";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { HowItWorksSection } from "@/components/landingPage/HowItWorks";
+import { ReviewSection } from "@/components/landingPage/Review";
 export default function Home() {
   return (
     <div>
@@ -49,6 +50,7 @@ export default function Home() {
         </div>
       </section>
       <HowItWorksSection></HowItWorksSection>
+      <ReviewSection></ReviewSection>
       <h1>Home page </h1>
     </div>
   );

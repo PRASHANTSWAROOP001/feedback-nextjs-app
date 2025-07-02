@@ -71,7 +71,7 @@ export function HowItWorksSection() {
       </div>
 
       {/* Terminal - same width as 2 cards + gap */}
-      <div className="w-full flex items-center justify-center py-16 px-4">
+      {/* <div className="w-full flex items-center justify-center py-16 px-4">
         <div className="w-full max-w-3xl mx-auto flex justify-center items-center">
           <Terminal>
             <TypingAnimation>&gt; npx feedback-app init</TypingAnimation>
@@ -109,7 +109,7 @@ export function HowItWorksSection() {
             </TypingAnimation>
           </Terminal>
         </div>
-      </div>
+      </div> */}
     </section>
   );
 }
