@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div>
       <Navbar></Navbar>
-      <section id='home' className="w-full py-12 md:py-24 lg:py-28 h-screen">
+      <section id="home" className="w-full py-12 md:py-24 lg:py-28 h-screen">
         <AnimatedGridPattern
           numSquares={50}
           maxOpacity={0.1}
@@ -21,7 +21,7 @@ export default function Home() {
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="space-y-2">
-              <Badge variant="secondary"  className="mb-4 lg:text-lg">
+              <Badge variant="secondary" className="mb-4 lg:text-lg">
                 📬 Collect Feedback Seamlessly
               </Badge>
               <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">

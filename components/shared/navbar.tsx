@@ -1,17 +1,22 @@
 "use client";
 import { Button } from "../ui/button";
 import { MenuIcon } from "lucide-react";
-import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
+import {
+  Sheet,
+  SheetTrigger,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "../ui/sheet";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
-
 function Navbar() {
   const navlinks = [
-    { name: "Home", url: "/" },
-    { name: "Product", url: "/" },
-    { name: "Pricing", url: "/" },
-    { name: "Review", url: "/" },
+    { name: "Home", url: "#home" },
+    { name: "Product", url: "#how-it-works" },
+    { name: "Pricing", url: "#pricing" },
+    { name: "Review", url: "#review" },
     { name: "Demo", url: "/" },
   ];
 
@@ -20,9 +25,9 @@ function Navbar() {
     { name: "Discord", url: "#" },
   ];
 
-  const {isSignedIn} = useUser()
+  const { isSignedIn } = useUser();
 
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <header className="w-full sticky top-0 z-50 border-b bg-white/80 backdrop-blur-sm">
@@ -57,9 +62,23 @@ function Navbar() {
               {item.name}
             </a>
           ))}
-        {!isSignedIn? (  <Button onClick={()=>router.push("/signin")} variant="outline" size="sm">
-            Sign In
-          </Button>): (<Button onClick={()=>router.push("/dashboard")} variant={"outline"} size={"sm"}>Dashboard</Button>) }
+          {!isSignedIn ? (
+            <Button
+              onClick={() => router.push("/signin")}
+              variant="outline"
+              size="sm"
+            >
+              Sign In
+            </Button>
+          ) : (
+            <Button
+              onClick={() => router.push("/dashboard")}
+              variant={"outline"}
+              size={"sm"}
+            >
+              Dashboard
+            </Button>
+          )}
         </div>
       </div>
 
@@ -86,6 +105,23 @@ function Navbar() {
                   {item.name}
                 </a>
               ))}
+              {!isSignedIn ? (
+                <Button
+                  onClick={() => router.push("/signin")}
+                  variant="outline"
+                  size="sm"
+                >
+                  Sign In
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => router.push("/dashboard")}
+                  variant={"outline"}
+                  size={"sm"}
+                >
+                  Dashboard
+                </Button>
+              )}
             </div>
           </SheetContent>
         </Sheet>

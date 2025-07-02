@@ -1,16 +1,10 @@
-import {
-  User,
-  FolderIcon,
-  TagIcon,
-  Send,
-} from "lucide-react";
+import { User, FolderIcon, TagIcon, Send } from "lucide-react";
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
 import {
   AnimatedSpan,
   Terminal,
   TypingAnimation,
 } from "@/components/magicui/terminal";
-
 
 const steps = [
   {
@@ -53,13 +47,15 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section className="w-full py-16 bg-background">
+    <section id="how-it-works" className="w-full py-16 bg-background">
       <div className="container mx-auto px-4 md:px-6 max-w-5xl text-center space-y-4 mb-10">
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight">
           How It Works — Start in Minutes
         </h2>
         <p className="text-muted-foreground max-w-2xl mx-auto">
-          Get up and running with just a few clicks. Whether you’re a solo creator or a growing team, collecting structured feedback has never been easier.
+          Get up and running with just a few clicks. Whether you’re a solo
+          creator or a growing team, collecting structured feedback has never
+          been easier.
         </p>
       </div>
 
@@ -113,4 +109,3 @@ export function HowItWorksSection() {
     </section>
   );
 }
-
