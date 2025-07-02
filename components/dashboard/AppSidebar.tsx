@@ -43,7 +43,7 @@ const items = [
   },
   {
     title: "Invite",
-    url: "#",
+    url: "/dashboard/invitation",
     icon: Handshake,
   },
   {
