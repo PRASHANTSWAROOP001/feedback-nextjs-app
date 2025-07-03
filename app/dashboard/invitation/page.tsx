@@ -31,7 +31,8 @@ export default async function InvitationPage() {
 
       <div className="mt-2">
 
-        <EmailTable></EmailTable>
+        <EmailTable topicArray={topicArray && topicArray.length > 0 ? topicArray: []} 
+         categoryArray={categoryArray && categoryArray.length > 0 ? categoryArray: []}></EmailTable>
 
       </div>
     </main>

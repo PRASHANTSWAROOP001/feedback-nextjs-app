@@ -108,44 +108,41 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-
     const { searchParams } = req.nextUrl;
 
-    const search = searchParams.get("q") || ""
-    const page = parseInt(searchParams.get("page") || "1")
-    const limit = parseInt(searchParams.get("limit") || "10")
-    const categoryId = searchParams.get("categoryId")
-    const workspaceId = searchParams.get("workspaceId")
+    const search = searchParams.get("q") || "";
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const categoryId = searchParams.get("categoryId");
+    const workspaceId = searchParams.get("workspaceId");
+
+    if (!workspaceId) {
+      return NextResponse.json({ error: "Missing workspaceId param" }, { status: 400 });
+    }
 
     if (limit > 10) {
-     return NextResponse.json({ error: "limit cant be greater than 10" }, { status: 401 })
+      return NextResponse.json({ error: "Limit cannot be greater than 10" }, { status: 401 });
     }
 
     const skip = (page - 1) * limit;
 
-    if (!workspaceId) {
-     return NextResponse.json({ error: "missing workspaceId param" }, { status: 400 })
-    }
-
-    if (!categoryId) {
-      return NextResponse.json({ error: "missing categoryId" }, { status: 400 })
-    }
-
-
     const where: any = {
       workspaceId,
-      categories: {
+    };
+
+    if (categoryId) {
+      where.categories = {
         some: {
-          categoryId
-        }
-      }
+          categoryId,
+        },
+      };
     }
 
     if (search) {
       where.email = {
         contains: search,
-        mode: "insensitive"
-      }
+        mode: "insensitive",
+      };
     }
 
     const [emails, count] = await Promise.all([
@@ -154,28 +151,27 @@ export async function GET(req: NextRequest) {
         skip,
         take: limit,
         orderBy: {
-          createdAt: "desc"
+          createdAt: "desc",
         },
         select: {
           email: true,
           name: true,
           id: true,
-          createdAt: true
-        }
+          createdAt: true,
+        },
       }),
-      prisma.emailEntry.count({ where: where })
-    ])
+      prisma.emailEntry.count({ where }),
+    ]);
 
     return NextResponse.json({
       emails,
       total: count,
       page,
-      totalPage: Math.ceil(count / limit)
-    })
-
+      totalPages: Math.ceil(count / limit),
+    });
   } catch (error) {
-    console.error("error happend while getting emails + category", error)
-    return NextResponse.json({ error: "error happend" }, { status: 500 })
+    console.error("Error occurred while fetching emails:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
 
