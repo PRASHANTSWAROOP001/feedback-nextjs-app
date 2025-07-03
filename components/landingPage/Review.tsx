@@ -74,7 +74,7 @@ const ReviewCard = ({
 };
 
 
-export function ReviewSection() {
+export default function ReviewSection() {
   return (
     <section id='review' className="w-full py-16 bg-background">
       <div className="container max-w-4xl mx-auto px-4 md:px-6 text-center space-y-4 mb-10">

@@ -39,7 +39,7 @@ const steps = [
   },
 ];
 
-export function HowItWorksSection() {
+export default function HowItWorksSection() {
   return (
     <section id="how-it-works" className="w-full py-16 bg-background">
       <div className="container mx-auto px-4 md:px-6 max-w-5xl text-center space-y-4 mb-10">

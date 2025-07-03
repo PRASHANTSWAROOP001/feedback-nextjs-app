@@ -4,9 +4,25 @@ import { Badge } from "@/components/ui/badge";
 import { Check,} from "lucide-react";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
-import { HowItWorksSection } from "@/components/landingPage/HowItWorks";
-import { ReviewSection } from "@/components/landingPage/Review";
-import Pricing from "@/components/landingPage/Pricing";
+import dynamic from "next/dynamic";
+import MainSkeleton from "@/components/shared/MainSkeleton";
+
+const ReviewSection = dynamic(()=>import("@/components/landingPage/Review"),{
+  ssr:true,
+  loading:()=><MainSkeleton></MainSkeleton>
+} )
+
+const HowItWorksSection = dynamic(()=>import("@/components/landingPage/HowItWorks"), {
+  ssr:true,
+  loading:()=><MainSkeleton></MainSkeleton>
+})
+
+
+const Pricing = dynamic(()=>import("@/components/landingPage/Pricing"), {
+  ssr:true,
+  loading:()=><MainSkeleton></MainSkeleton>
+})
+
 export default function Home() {
   return (
     <div>
