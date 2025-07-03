@@ -1,7 +1,7 @@
 import Navbar from "@/components/shared/navbar";
 import { AnimatedGridPattern } from "@/components/magicui/animated-grid-pattern";
 import { Badge } from "@/components/ui/badge";
-import { Check, ArrowRight } from "lucide-react";
+import { Check,} from "lucide-react";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { HowItWorksSection } from "@/components/landingPage/HowItWorks";

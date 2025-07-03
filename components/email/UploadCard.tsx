@@ -2,10 +2,8 @@
 import { useState, useRef } from "react";
 import {
   Card,
-  CardDescription,
   CardContent,
   CardFooter,
-  CardTitle,
   CardHeader,
 } from "../ui/card";
 import { Button } from "../ui/button";

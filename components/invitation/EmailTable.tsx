@@ -31,8 +31,6 @@ import {
   ChevronsRight,
   Mail,
   Send,
-  Users,
-  Filter,
 } from "lucide-react";
 
 interface Email {
@@ -40,6 +38,8 @@ interface Email {
   email: string;
   createdAt: string;
 }
+
+import { SkeletonCard } from "../shared/SkeltonCard";
 
 type EmailTableProp = {
   categoryArray: Category[];
@@ -147,6 +147,10 @@ export default function EmailTable({ categoryArray }: EmailTableProp) {
   };
 
   const getEmailDomain = (email: string) => email.split("@")[1] || "";
+
+  if(loading){
+    return <SkeletonCard></SkeletonCard>
+  }
 
   return (
     <div className="min-h-screen bg-gray-50/30 p-4 md:p-6 lg:p-8">

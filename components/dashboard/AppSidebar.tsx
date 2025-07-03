@@ -1,6 +1,6 @@
 "use client"
-import {Home, Inbox,LaptopMinimal,Signpost,Handshake, NotebookText, Settings, ScrollText} from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
+import {Home, Inbox,Signpost,Handshake, NotebookText, Settings, ScrollText} from "lucide-react"
+import { Avatar, AvatarFallback } from "../ui/avatar"
 import { useUser } from "@clerk/nextjs"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel, DropdownMenuGroup , DropdownMenuContent} from "../ui/dropdown-menu"
 import { useClerk } from "@clerk/nextjs"
@@ -59,7 +59,7 @@ const items = [
 ]
 
 export function AppSidebar() {
-    const {isLoaded, user, isSignedIn} = useUser();
+    const {user } = useUser();
     const {signOut} = useClerk()
     const email = user?.primaryEmailAddress?.emailAddress;
     const rootmail = email?.split("@")[0]

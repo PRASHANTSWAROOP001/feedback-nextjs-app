@@ -1,11 +1,5 @@
 import { User, FolderIcon, TagIcon, Send } from "lucide-react";
-import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
-import {
-  AnimatedSpan,
-  Terminal,
-  TypingAnimation,
-} from "@/components/magicui/terminal";
-
+import { BentoCard,} from "@/components/magicui/bento-grid";
 const steps = [
   {
     Icon: User,

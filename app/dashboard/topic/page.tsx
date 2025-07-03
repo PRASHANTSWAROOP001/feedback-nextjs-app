@@ -2,11 +2,19 @@
 import TopicPopover from "@/components/dashboard/TopicPopOver";
 import createTopic from "@/app/action/createTopic";
 import SearchInput from "@/components/category/seachbar";
-import PaginatedList from "@/components/category/PaginatedList";
 import deleteTopic from "@/app/action/topic/deleteTopic";
 import DeleteWorkspacePopover from "@/components/dashboard/DeleteWorkspacepop";
 import editTopic from "@/app/action/topic/editTopic";
 import EditTopicPopover from "@/components/topic/editPopover";
+import { SkeletonCard } from "@/components/shared/SkeltonCard";
+
+import dynamic from "next/dynamic";
+
+const PaginatedList = dynamic(()=>import("@/components/category/PaginatedList"), {
+  ssr:false,
+  loading:()=><SkeletonCard></SkeletonCard>
+})
+
 export default function TopicMainPage() {
   return (
     <main className="w-full min-h-screen relative">

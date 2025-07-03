@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import addEmail from "@/app/action/addEmail";
 import EmailPagePopover from "@/components/email/emailPagePopover";
 import { Category } from "@/app/generated/prisma";
@@ -6,7 +5,14 @@ import { CategoryResponse } from "../../../types/types";
 import { getAllCategory } from "@/app/action/getAllCategory";
 import UploadEmailCard from "@/components/email/UploadCard";
 import SearchBarWithInput from "@/components/email/SearchBarWithInputBox";
-import EmailTabel from "@/components/email/TableContent";
+import { SkeletonCard } from "@/components/shared/SkeltonCard";
+
+import dynamic from "next/dynamic";
+
+const EmailTable = dynamic(()=>import("@/components/email/TableContent"), {
+  ssr:true,
+  loading: ()=><SkeletonCard></SkeletonCard>
+})
 
 export default async function EmailPage() {
   const categoryResponse: CategoryResponse = await getAllCategory();
@@ -39,9 +45,9 @@ export default async function EmailPage() {
 
       </div>
 
-      <EmailTabel>
+      <EmailTable>
 
-      </EmailTabel>
+      </EmailTable>
     </main>
   );
 }

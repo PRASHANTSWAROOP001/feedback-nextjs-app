@@ -1,12 +1,18 @@
-import { Mail, ScrollText, Signpost } from "lucide-react";
+import { Mail} from "lucide-react";
 import { getAllCategory } from "@/app/action/getAllCategory";
 import getAllTopics from "@/app/action/getAllTopic";
 import { Topic } from "@/app/generated/prisma";
 import { TopicResponse } from "@/types/types";
 import { Category } from "@/app/generated/prisma";
 import { CategoryResponse } from "@/types/types";
-import InviteStatsCard from "@/components/invitation/InvitationCountingCard";
-import EmailTable from "@/components/invitation/EmailTable";
+import dynamic from "next/dynamic";
+import { SkeletonCard } from "@/components/shared/SkeltonCard";
+
+const EmailTable = dynamic(()=>import("@/components/invitation/EmailTable"), {
+  ssr:true,
+  loading:()=> <SkeletonCard></SkeletonCard>
+})
+
 
 export default async function InvitationPage() {
     const topicData:TopicResponse = await getAllTopics();

@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Icon, LucideProps } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { LucideProps } from 'lucide-react';
 
 type InvitationCardProp = {
     data:number,

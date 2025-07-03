@@ -16,9 +16,7 @@ import {
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
@@ -26,7 +24,7 @@ import updateEmail from "@/app/action/email/updateEmail";
 import DeleteWorkspacePopover from "../dashboard/DeleteWorkspacepop";
 import deleteEmail from "@/app/action/email/deleteEmail";
 import EditWorkspacePopover from "../dashboard/WorkspaceEditPop";
-export default function EmailTabel() {
+export default function EmailTable() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
   const page = parseInt(searchParams.get("page") || "1");

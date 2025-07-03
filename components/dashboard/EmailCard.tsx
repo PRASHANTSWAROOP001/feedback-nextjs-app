@@ -1,6 +1,5 @@
 
 import { MailPlus} from "lucide-react";
-import { Button } from "../ui/button";
 import {
   Card,
   CardTitle,
