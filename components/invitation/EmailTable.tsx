@@ -46,7 +46,7 @@ type EmailTableProp = {
   topicArray: Topic[];
 };
 
-export default function EmailTable({ categoryArray }: EmailTableProp) {
+export default function EmailTable({ categoryArray, topicArray}: EmailTableProp) {
   const { workspaceId } = useWorkspaceStore();
   const [emails, setEmails] = useState<Email[]>([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -56,6 +56,7 @@ export default function EmailTable({ categoryArray }: EmailTableProp) {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [topic, selectTopic] = useState<string|null>(null)
 
   useEffect(() => {
     const fetchEmails = async () => {
@@ -130,14 +131,36 @@ export default function EmailTable({ categoryArray }: EmailTableProp) {
     emails.length > 0 &&
     emails.every((email) => selectedEmails.includes(email.id));
 
-  const handleSendInvitations = () => {
+  const handleSendInvitations = async () => {
     if (selectedEmails.length === 0) {
       toast("Please select at least one email.");
       return;
     }
 
-    toast(`Invitations sent to ${selectedEmails.length} emails.`);
-    setSelectedEmails([]);
+    if (topic == null) {
+      toast("missing topic id please select one");
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+
+      formData.append("topicId", topic);
+
+      selectedEmails.forEach((val) => formData.append("emailIds", val));
+
+  const sendInviteResponse = await axios.post("/api/invitation",formData,{headers:{
+    "Content-Type":"multipart/form-data"
+  }});
+
+      if (sendInviteResponse.status == 200) {
+        console.log(sendInviteResponse);
+        toast(`Invitations sent to ${selectedEmails.length} emails.`);
+        setSelectedEmails([]);
+      }
+    } catch (error) {
+      toast("error happend while sending invites");
+    }
   };
 
   const resetFilters = () => {
@@ -300,9 +323,27 @@ export default function EmailTable({ categoryArray }: EmailTableProp) {
                 "No emails selected"
               )}
             </div>
+               <Select onValueChange={(val) => selectTopic(val)}>
+                <SelectTrigger>
+                  <SelectValue
+                    placeholder={
+                      categoryId
+                        ? topicArray.find((c) => c.id === categoryId)?.title
+                        : "Select topic"
+                    }
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  {topicArray.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             <Button
               onClick={handleSendInvitations}
-              disabled={selectedEmails.length === 0}
+              disabled={selectedEmails.length === 0 || topic === null}
               className="bg-blue-600 text-white"
             >
               <Send className="w-4 h-4 mr-2" />

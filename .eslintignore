@@ -1,0 +1,20 @@
+# Build & dependency folders
+node_modules
+.next
+dist
+
+# Prisma generated files
+prisma/dev.db
+prisma/migrations
+app/generated
+
+# IDE/editor-specific folders
+.idea
+.vscode
+
+# UI libraries or third-party component folders
+components/magicui
+
+# Optional: ignore auto-generated UI folder if you don't want to lint it
+# ONLY IF you’re using shadcn/ui and haven't modified it manually
+components/ui
