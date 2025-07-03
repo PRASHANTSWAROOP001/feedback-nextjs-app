@@ -72,7 +72,7 @@ model Invitation {
   emailEntry   EmailEntry @relation(fields: [emailEntryId], references: [id], onDelete: Cascade)
   topicId      String
   topic        Topic      @relation(fields: [topicId], references: [id], onDelete: Cascade)
-  token        String     @unique
+  token        String     @unique @default(cuid())
   used         Boolean    @default(false)
   sentAt       DateTime   @default(now())
   submittedAt  DateTime?
