@@ -7,6 +7,7 @@ import { Category } from "@/app/generated/prisma";
 import { CategoryResponse } from "@/types/types";
 import dynamic from "next/dynamic";
 import { SkeletonCard } from "@/components/shared/SkeltonCard";
+import InviteTable from "@/components/invitation/InviteTable";
 
 const EmailTable = dynamic(()=>import("@/components/invitation/EmailTable"), {
   ssr:true,
@@ -41,6 +42,11 @@ export default async function InvitationPage() {
          categoryArray={categoryArray && categoryArray.length > 0 ? categoryArray: []}></EmailTable>
 
       </div>
+
+      <div className="py-8">
+        <InviteTable topicArray={topicArray && topicArray.length > 0 ? topicArray: []}></InviteTable>
+      </div>
+
     </main>
   );
 }

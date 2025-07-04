@@ -14,8 +14,6 @@ const sourceFile = fs.readFileSync(filePath, "utf-8") // reads the file
 const template = handlebars.compile(sourceFile)// compiles it
 
 
-
-
 // Email transporter
 const transporter = nodeMailer.createTransport({
   service: "gmail",
@@ -103,13 +101,15 @@ export async function POST(req: NextRequest) {
 
     const emailResults = await Promise.allSettled(
       emailEntries.map(async (entry) => {
-        const invite = createInviteArray.find((i) => i.emailEntryId === entry.id);
-        const inviteLink = `${process.env.DOMAIN || "http://localhost:3000"}/invite/${invite?.token}`;
+        const invite = createInviteArray.find((i) => i.emailEntryId === entry.id); // matching emailId from frontend with fetched from db
+        const inviteLink = `${process.env.DOMAIN || "http://localhost:3000"}/invite/${invite?.token}`; // once we have match we can decode the respective token id from field token 
         const htmlContent = getInviteEmailHTML({
           inviteLink,
           topicDescription: topicDetails?.description ?? "",
           topicTitle: topicDetails?.title ?? ""
         })
+
+        // this creates the dynamic content for the invite
 
         await transporter.sendMail({
           from: process.env.GMAIL_USER,
@@ -118,6 +118,8 @@ export async function POST(req: NextRequest) {
           html: htmlContent,
         });
 
+        // sending the email
+
         return { email: entry.email, token: invite?.token };
       })
     );
@@ -125,6 +127,8 @@ export async function POST(req: NextRequest) {
     const success: { email: string; token: string }[] = [];
     const failed: { email: string; reason: any }[] = [];
 
+    // counting success and failures cause of promise.allSettled this allows to proceed even if there is a failure
+    
     emailResults.forEach((result, index) => {
       const entry = emailEntries[index];
       if (result.status === "fulfilled") {
@@ -162,5 +166,70 @@ export async function POST(req: NextRequest) {
         status: 500,
       }
     );
+  }
+}
+
+
+export async function GET(req:NextRequest){
+  try {
+
+    const {searchParams} = req.nextUrl;
+    const search = searchParams.get("q") || ""
+    const page = parseInt(searchParams.get("page") || "1")
+    const limit = parseInt(searchParams.get("limit") || "10")
+    const topicId = searchParams.get("topicId")
+
+    if(!topicId){
+      return NextResponse.json({success:false, message:"please send the topicId in url"}, {status:400})
+    }
+
+  const [getAllInviteForTopic, count] = await Promise.all([prisma.invitation.findMany({
+      where:{
+        topicId,
+        ...(search && {
+          emailEntryId:{
+            contains:search,
+            mode:"insensitive"
+          }
+        })
+      },
+      take:limit,
+      select:{
+        emailEntryId:true,
+        id:true,
+        used:true,
+        sentAt:true,
+        expiresAt:true,
+        submittedAt:true
+      },
+      orderBy:{
+        sentAt:"desc"
+      }
+    }), 
+    await prisma.invitation.count({      where:{
+        topicId,
+        ...(search && {
+          emailEntryId:{
+            contains:search,
+            mode:"insensitive"
+          }
+        })
+      }})
+  ])
+  
+  return NextResponse.json({
+    data:getAllInviteForTopic,
+    total:count,
+    page,
+    totalPages: Math.ceil(count/limit)
+  })
+
+  } catch (error) {
+    console.error("error happend while fetching the invitation List", error);
+
+    return NextResponse.json({
+      success:false,
+      error:"Error happend while getting invite list"
+    }, {status:500})
   }
 }
