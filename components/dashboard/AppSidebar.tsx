@@ -48,7 +48,7 @@ const items = [
   },
   {
     title: "Feedback",
-    url: "#",
+    url: "/dashboard/feedback",
     icon: NotebookText,
   },
   {
