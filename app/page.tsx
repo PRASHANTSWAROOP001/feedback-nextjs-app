@@ -23,6 +23,9 @@ const Pricing = dynamic(()=>import("@/components/landingPage/Pricing"), {
   loading:()=><MainSkeleton></MainSkeleton>
 })
 
+import WhyPage from "@/components/landingPage/WhyWeMadeThis";
+import Footer from "@/components/landingPage/Footer";
+
 export default function Home() {
   return (
     <div>
@@ -66,8 +69,11 @@ export default function Home() {
         </div>
       </section>
       <HowItWorksSection></HowItWorksSection>
-      <ReviewSection></ReviewSection>
       <Pricing></Pricing>
+      <ReviewSection></ReviewSection>
+      <WhyPage></WhyPage>
+       <Footer></Footer>
     </div>
+   
   );
 }

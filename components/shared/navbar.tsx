@@ -17,7 +17,7 @@ function Navbar() {
     { name: "Product", url: "#how-it-works" },
     { name: "Pricing", url: "#pricing" },
     { name: "Review", url: "#review" },
-    { name: "Demo", url: "/" },
+    { name: "About", url: "#about" },
   ];
 
   const socialLinks = [
