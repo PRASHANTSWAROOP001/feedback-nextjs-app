@@ -1,5 +1,6 @@
 import { User, FolderIcon, TagIcon, Send } from "lucide-react";
 import { BentoCard,} from "@/components/magicui/bento-grid";
+
 const steps = [
   {
     Icon: User,

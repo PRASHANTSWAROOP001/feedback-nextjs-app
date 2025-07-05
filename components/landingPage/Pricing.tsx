@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import ParticlesBackground from "./ParticleBackground";
+import Link from "next/link";
 
 const freePlanFeatures = [
   "Up to 10 user categories",
@@ -42,6 +43,7 @@ const enterprisePlanFeatures = [
   "24/7 call & email support",
   "Bunch Of Other Things",
 ];
+
 
 
 export default function Pricing() {
@@ -86,7 +88,7 @@ export default function Pricing() {
                   <FeatureItem text={val} key={index}></FeatureItem>
                 ))}
               </ul>
-              <ShimmerButton className="w-full"> Start now</ShimmerButton>
+              <Link href={"/signup"}><ShimmerButton className="w-full"> Signup </ShimmerButton></Link>
             </CardContent>
           </Card>
 

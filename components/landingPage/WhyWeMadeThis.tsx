@@ -2,6 +2,7 @@ import { Badge } from "../ui/badge";
 import { ShimmerButton } from "../magicui/shimmer-button";
 import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
 import { Meteors } from "../magicui/meteors";
+import Link from "next/link";
 
 export default function WhyPage() {
   return (
@@ -9,7 +10,6 @@ export default function WhyPage() {
       id="about"
       className="relative w-full py-20 overflow-hidden bg-background"
     >
-      {/* 🔥 Meteor Shower Background */}
       <div className="absolute inset-0 z-0">
         <Meteors number={25} />
       </div>
@@ -31,7 +31,7 @@ export default function WhyPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
-            <ShimmerButton>Try it Out → Rate Us</ShimmerButton>
+            <Link href={"/signin"}><ShimmerButton>Try it Out → Rate Us</ShimmerButton></Link>
             <InteractiveHoverButton>Read the Full Story</InteractiveHoverButton>
           </div>
         </div>

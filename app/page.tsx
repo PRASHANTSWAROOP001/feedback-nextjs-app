@@ -5,6 +5,7 @@ import { Check,} from "lucide-react";
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import MainSkeleton from "@/components/shared/MainSkeleton";
 
 const ReviewSection = dynamic(()=>import("@/components/landingPage/Review"),{
@@ -56,12 +57,14 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-6">
-              <ShimmerButton>Start Collecting Feedback</ShimmerButton>
-              <InteractiveHoverButton>See It In Action</InteractiveHoverButton>
+  
+              <Link href={"/signup"}><ShimmerButton>Start Collecting Feedback</ShimmerButton></Link>
+            
+              <InteractiveHoverButton><Link href={"/#how-it-works"}>See It In Action</Link></InteractiveHoverButton>
             </div>
             <div className="flex items-center space-x-2 text-sm text-muted-foreground">
               <Check className="h-4 w-4 text-green-500" />
-              <span>Free 14-day trial</span>
+              <span>Explore Free Tier</span>
               <Check className="h-4 w-4 text-green-500" />
               <span>No credit card required</span>
             </div>

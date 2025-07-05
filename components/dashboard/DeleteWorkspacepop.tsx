@@ -14,7 +14,7 @@ function DeleteWorkspacePopover({ id, handleDelete }: DeleteWorkspacePopoverProp
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="destructive" size="lg">
+        <Button variant="default" size="lg">
           Delete
         </Button>
       </PopoverTrigger>
