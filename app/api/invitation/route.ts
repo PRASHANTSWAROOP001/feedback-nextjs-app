@@ -102,7 +102,8 @@ export async function POST(req: NextRequest) {
     const emailResults = await Promise.allSettled(
       emailEntries.map(async (entry) => {
         const invite = createInviteArray.find((i) => i.emailEntryId === entry.id); // matching emailId from frontend with fetched from db
-        const inviteLink = `${process.env.DOMAIN || "http://localhost:3000"}/invite/${invite?.token}`; // once we have match we can decode the respective token id from field token 
+        const inviteLink = `${process.env.DOMAIN || "http://localhost:3000"}/invite?token=${invite?.token}`;
+      // once we have match we can decode the respective token id from field token 
         const htmlContent = getInviteEmailHTML({
           inviteLink,
           topicDescription: topicDetails?.description ?? "",
