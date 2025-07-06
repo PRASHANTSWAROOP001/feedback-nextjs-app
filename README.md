@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Feedback Collection Platform
 
-## Getting Started
+## 🚀 What I Built
 
-First, run the development server:
+This is a feedback collection platform designed for ease and accountability. It allows an **admin** to create a **topic** (e.g., for alpha testing), define **categories** to manage email segments, and then collect structured feedback through a **frictionless magic link**.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 🧩 How It Works
+
+1. Admin creates a topic to collect feedback.
+2. Admin defines a category to group emails (e.g., testers, users).
+3. Admin uploads a `.csv` with emails (with `email` as header).
+4. Users are sent invite links via email.
+5. Users click the **magic link** and submit their feedback directly.
+6. No more Google Forms. Just clean, accountable feedback collection.
+
+**✅ 100% Accountability** | **💬 Zero Friction** | **📨 Streamlined Process**
+
+---
+
+## 🧪 Features
+
+- Magic link feedback submission
+- Email-based invite system
+- Category-wise email groupings
+- Clean and responsive UI
+- Admin-controlled topic and invite creation
+
+---
+
+## 🔧 What's Missing / To-Do
+
+- 🔗 Integration with Amazon SES using a verified domain
+- 🧼 Polishing of some UI pages (still version 1)
+- 💳 Add payment gateway for future SaaS version
+- 🕵️ Add anonymous feedback option
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend & Backend**: [Next.js](https://nextjs.org/)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Database**: PostgreSQL
+- **Auth**: [Clerk](https://clerk.dev/)
+- **Emails**: Nodemailer (moving to Amazon SES)
+- **Styling**: Tailwind CSS + ShadCN UI
+- **Landing Page**: MagicUI components
+
+---
+
+## 📁 Folder Structure (Simplified)
+
+```
+/app
+  /api
+  /dashboard
+  /landing
+  /auth
+/components
+/lib
+/utils
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🧠 Inspiration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Built from a need to collect clean and traceable feedback without relying on clunky tools like Google Forms. This system allows admins to know who submitted what, making feedback loops tighter and more reliable.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📈 Future Vision
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The platform will eventually evolve into a **SaaS** product with:
+- Subscription plans
+- Analytics for feedback
+- Role-based admin system
+- Custom domains
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🙌 Contributions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+If you'd like to suggest features, fix bugs, or contribute, feel free to open an issue or PR!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📫 Contact
+
+Built with ❤️ by Prashant Swaroop
