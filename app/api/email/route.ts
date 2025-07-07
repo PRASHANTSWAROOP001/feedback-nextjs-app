@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { parse } from "papaparse"
 import { prisma } from "../../../lib/prisma"
 import z from "zod";
+import { CategoryToEmailEntry, EmailEntry } from "@/app/generated/prisma";
 
 
 const emailSchema = z.object({
@@ -64,29 +65,83 @@ export async function POST(req: NextRequest) {
     const emails = Array.from(new Set(validRows.map((r) => r.email)))
 
     if (!emails.length) {
-      return NextResponse.json({ succcess: false, message: "no unique/valid email" }, { status: 400 })
+      return NextResponse.json({ success: false, message: "no unique/valid email" }, { status: 400 })
     }
 
     const resultTx = await prisma.$transaction(async (tx) => {
-      const createdEmailEntries = await Promise.all(
-        emails.map((val) => (
-          tx.emailEntry.create({
-            data: {
-              email: val,
-              workspaceId: workspaceId as string
+
+      const getAllExistingEmails:EmailEntry[] = await tx.emailEntry.findMany({
+        where:{
+          email:{in: emails},
+          workspaceId:workspaceId as string
+        }
+      })
+
+      const existingEmailMap = new Map(
+        getAllExistingEmails.map((entry)=>[entry.email, entry])
+      ) 
+
+      // created a map for easy and constant lookup
+
+      const newEmails = emails.filter((email)=>(!existingEmailMap.has(email)))
+
+      // this checks the map by comparing emails field if nothing matches we return the emails 
+
+      // now add all the new emails to database
+      const addNewEmails = await Promise.all(
+        newEmails.map((data)=>(
+            tx.emailEntry.create({
+            data:{
+              email:data,
+              workspaceId:workspaceId as string
             }
           })
         ))
       )
 
-      await tx.categoryToEmailEntry.createMany({
-        data: createdEmailEntries.map((item) => ({
-          categoryId: categoryId as string,
-          emailEntryId: item.id
-        }))
+      // now link new email with category and add it to the pivot table
+
+      const linkNewEmails = await tx.categoryToEmailEntry.createMany({
+        data:addNewEmails.map((data)=>(
+          {
+            emailEntryId:data.id,
+            categoryId:categoryId as string
+          }
+        ))
       })
 
-      return createdEmailEntries;
+      // check which existing email is linked 
+      // now this linkedemail could either be linked to category which user has currently given or existing one
+      // even if email is linked to any other category we still have to link it to our new categor
+      // so what do we have to sort -> emails that are linked with current category
+
+      // how do we do that getAllExisting Linked Emails
+      // check which one is already linked to our new/current category discard that we dont need that
+      // now link all the filtered emails to current category
+
+      const linkedEntriesOnly = getAllExistingEmails
+
+      const existingPivotLinks = await tx.categoryToEmailEntry.findMany({
+        where:{emailEntryId:{in: linkedEntriesOnly.map((e)=>e.id)},
+      categoryId:categoryId as string}
+      })
+
+      const existingPivotLinksMap = new Map(
+        existingPivotLinks.map((value)=>[value.emailEntryId, value])
+      )
+
+      const notLinkedData = getAllExistingEmails.filter((emailData)=>(!existingPivotLinksMap.has(emailData.id)))
+
+      if(notLinkedData.length  > 0){
+        await tx.categoryToEmailEntry.createMany({
+          data:notLinkedData.map((data)=>({
+            emailEntryId:data.id,
+            categoryId:categoryId as string
+          }))
+        })
+      }
+
+      return [...addNewEmails, ...notLinkedData]
 
     })
 
@@ -99,7 +154,7 @@ export async function POST(req: NextRequest) {
 
   } catch (error) {
 
-    console.error("error happend while adding emails")
+    console.error("error happend while adding emails", error)
     return NextResponse.json({ success: false, message: "error while adding emails" }, { status: 500 })
 
   }
