@@ -18,6 +18,7 @@ model Workspace {
   topics       Topic[]
   categories   Category[]
   emailEntries EmailEntry[]
+  emailUseage  EmailUsage?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
 
@@ -83,6 +84,7 @@ model Invitation {
   @@index([topicId])
   @@index([token])
   @@index([used])
+  @@unique([topicId, emailEntryId])
 }
 
 model Topic {
@@ -116,4 +118,17 @@ model Feedback {
   @@index([invitationId])
   @@index([topicId])
   @@index([submittedAt])
+}
+
+model EmailUsage {
+  id String @id @default(cuid())
+  workspaceId String @unique 
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  month DateTime
+  sentCount Int @default(0)
+
+  @@unique([workspaceId, month])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 }

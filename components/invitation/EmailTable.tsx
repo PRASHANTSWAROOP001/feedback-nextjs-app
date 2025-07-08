@@ -142,10 +142,16 @@ export default function EmailTable({ categoryArray, topicArray}: EmailTableProp)
       return;
     }
 
+    if(workspaceId == null){
+      return;
+    }
+
     try {
       const formData = new FormData();
 
       formData.append("topicId", topic);
+
+      formData.append("workspaceId", workspaceId)
 
       selectedEmails.forEach((val) => formData.append("emailIds", val));
 
