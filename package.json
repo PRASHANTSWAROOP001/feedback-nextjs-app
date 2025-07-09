@@ -34,6 +34,7 @@
     "node-mailjet": "^6.0.8",
     "nodemailer": "^7.0.4",
     "papaparse": "^5.5.3",
+    "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sonner": "^2.0.5",

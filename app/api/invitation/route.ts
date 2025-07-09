@@ -27,7 +27,7 @@ async function sendViaMailjet(email: string, variables: { invite_link: string, t
         To: [{ Email: email }],
         TemplateID: Number(process.env.MJ_TEMPLATE_ID),
         TemplateLanguage: true,
-        Subject: "You're invited!",
+        Subject: "Feedback requested",
         Variables: variables,
       },
     ],
