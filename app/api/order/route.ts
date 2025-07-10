@@ -2,19 +2,38 @@
 import { NextRequest, NextResponse } from "next/server"
 import Razorpay from "razorpay"
 import z, {ZodError} from "zod"
+import {prisma} from "../../../lib/prisma"
+import crypto from "crypto"
+
+
+type RazorpayOrderResponse = {
+  id: string;
+  entity: "order";
+  amount: number;
+  amount_paid: number;
+  amount_due: number;
+  currency: string;
+  receipt: string;
+  offer_id: string | null;
+  status: "created" | "attempted" | "paid";
+  attempts: number;
+  notes: Record<string, string>;
+  created_at: number;
+};
+
 
 
 const Subscription = z.enum([
-    "monthly",
-    "quaterly",
-    "half-yearly",
-    "yearly"
+    "MONTHLY",
+    "QUARTERLY",
+    "HALF_YEARLY",
+    "YEARLY"
 ])
 
 const orderSchema = z.object({
     amount:z.number(),
     clerkId:z.string(),
-    PlanType:Subscription
+    subscription:Subscription
 })
 
 
@@ -50,19 +69,31 @@ export async function POST(req:NextRequest){
             amount:parsedData.data.amount,
             currency:"INR",
             receipt:parsedData.data.clerkId,
-            notes: { Subscription: parsedData.data.PlanType, clerkId:parsedData.data.clerkId }
+            notes: { Subscription: parsedData.data.subscription, clerkId:parsedData.data.clerkId }
+        }) as RazorpayOrderResponse
+
+        const saveOrderInDb = await prisma.order.create({
+            data:{
+                amount:parsedData.data.amount,
+                clerkId:parsedData.data.clerkId,
+                subscription:parsedData.data.subscription,
+                razorPayOrderId:createNewOrder.id
+            }
         })
+
 
         return NextResponse.json({
             success:true,
-            data:createNewOrder
+            order:createNewOrder
         })
 
     } catch (error) {
         console.error("error happened while creating the order: ", error);
         return NextResponse.json({
             success:false,
-            message:"Internal Error happend Try Sorry for inconvience"
+            message:"Internal Error happend Try Again Sorry for inconvience"
         }, {status:500})
     }
 }
+
+
