@@ -20,17 +20,5 @@ export type EmailResponse = {
     data?:EmailEntry[]
 }
 
-export enum PlanType {
-  MONTHLY = "monthly",
-  QUARTERLY = "quarterly",
-  HALF_YEARLY = "half-yearly",
-  YEARLY = "yearly",
-}
 
-
-export type CreateOrder = {
-    amount: number,
-    clerkId:string,
-    planType:PlanType
-}
 

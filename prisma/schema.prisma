@@ -129,6 +129,34 @@ model EmailUsage {
 
   @@unique([workspaceId, month])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime? @updatedAt 
 
+}
+
+model Order{
+  id String @id @default(cuid())
+  razorPayOrderId String
+  amount Int
+  currency String @default("INR")
+  clerkId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  status OrderStatus @default(CREATED)
+  subscription Subscription 
+}
+
+enum OrderStatus {
+  CREATED
+  PAID
+  FAILED
+  EXPIRED
+  CANCELLED
+  REFUNDED
+}
+
+enum Subscription {
+  MONTHLY
+  QUARTERLY
+  HALF_YEARLY
+  YEARLY
 }
