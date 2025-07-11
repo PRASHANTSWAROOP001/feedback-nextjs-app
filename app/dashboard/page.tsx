@@ -1,5 +1,5 @@
 import DashboardDialog from "@/components/dashboard/DialogDashboard";
-import { findWorkspace } from "../action/checkWorkspace";
+import { findWorkspace } from "../action/workspace/workspace";
 import dynamic from "next/dynamic";
 
 // Lazy-load the big components
