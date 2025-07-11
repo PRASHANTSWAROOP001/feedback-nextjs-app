@@ -132,18 +132,19 @@ model EmailUsage {
   updatedAt DateTime? @updatedAt 
 
 }
-
-model Order{
-  id String @id @default(cuid())
-  razorPayOrderId String
-  amount Int
-  currency String @default("INR")
-  clerkId String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status OrderStatus @default(CREATED)
-  subscription Subscription 
+model Order {
+  id                String       @id @default(cuid())
+  razorPayOrderId   String       @unique
+  amount            Int
+  currency          String       @default("INR")
+  clerkId           String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  status            OrderStatus  @default(CREATED)
+  subscription      Subscription
+  payments          Payment[]    
 }
+
 
 enum OrderStatus {
   CREATED
@@ -159,4 +160,74 @@ enum Subscription {
   QUARTERLY
   HALF_YEARLY
   YEARLY
+}
+
+model Payment {
+  id                  String      @id @default(cuid())
+  razorPayPaymentId   String      @unique
+  razorPayOrderId     String
+  order               Order       @relation(fields: [orderId], references: [id])
+  orderId             String      
+  razorPaySignature   String
+  status              Status      @default(PENDING)
+  isVerified          Boolean     @default(false)
+  failureReason       String?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+  activeSubscription  ActiveSubscription?
+
+  @@index([razorPayPaymentId, status, isVerified])
+}
+
+
+enum Status {
+  SUCCESS
+  FAILED
+  PENDING
+  REFUNDED
+}
+
+model ActiveSubscription {
+  id              String      @id @default(cuid())
+  startDate       DateTime    @default(now())
+  clerkId         String
+  expiryDate      DateTime
+  isCancelled     Boolean     @default(false)
+  cancelledAt     DateTime?
+  payment         Payment     @relation(fields: [paymentId], references: [id])
+  paymentId       String      @unique
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  pricingId       String      @unique
+  pricing         Pricing     @relation(fields: [pricingId], references: [id])
+}
+
+model Pricing {
+  id                 String        @id @default(cuid())
+  admin              String        @unique // Clerk ID of the admin who created the plan
+  name               String        // e.g., "Monthly"
+  description        String        // e.g., "Perfect for getting started"
+  price              Int           // Amount in paise (if INR)
+  period             String        // e.g., "month", "year"
+  popular            Boolean       @default(false)
+  savings            String?       // Optional string like "Save 25%"
+  currency           String        @default("INR")
+  validity           Int           // Duration in days (e.g., 30 for monthly)
+  emailUsageLimit    Int           @default(100)
+  subscription       Subscription  @unique
+  features           Feature[]     // One-to-many relation
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  updatedBy          String?
+  activeSubscription ActiveSubscription[]
+}
+
+
+model Feature {
+  id        String   @id @default(cuid())
+  text      String   // e.g., "Up to 10,000 requests"
+  pricing   Pricing  @relation(fields: [pricingId], references: [id], onDelete: Cascade)
+  pricingId String
+
+  @@index([pricingId])
 }
