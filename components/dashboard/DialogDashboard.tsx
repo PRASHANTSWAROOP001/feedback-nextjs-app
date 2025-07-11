@@ -12,7 +12,7 @@ import {
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { addWorkspace } from "@/app/action/addWorkspace";
+import { addWorkspace } from "@/app/action/workspace/workspace";
 import { useTransition, useState, useRef } from "react";
 import { toast } from "sonner";
 

@@ -8,8 +8,7 @@ import {
   CardFooter,
   CardContent,
 } from "../ui/card";
-import updateWorkspace from "@/app/action/editWorkspace";
-import { deleteWorkSpace } from "../../app/action/deleteWorkspace";
+import { updateWorkspace, deleteWorkSpace } from "@/app/action/workspace/workspace";
 import { LaptopMinimal } from "lucide-react";
 import DeleteWorkspacePopover from "./DeleteWorkspacepop";
 import EditWorkspacePopover from "./WorkspaceEditPop";
