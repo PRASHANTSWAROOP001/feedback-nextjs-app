@@ -1,9 +1,9 @@
 "use client"
 
 import type React from "react"
-
+import { addPricing, updatePricing, deletePricing } from "@/app/action/price/pricingOps"
 import { useState } from "react"
-import { Plus, Edit, Trash2, Save, X, DollarSign, Users, TrendingUp, Settings } from "lucide-react"
+import { Plus, Edit, Trash2, Save, X, DollarSign, TrendingUp, Settings, Mail, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -21,66 +21,46 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from "sonner"
 
-interface PricingPlan {
+export interface PricingPlan {
   id: string
   name: string
-  price: number
-  originalPrice?: number
-  period: string
   description: string
-  features: string[]
+  price: number // Amount in paise
+  period: string
   popular: boolean
-  active: boolean
-  createdAt: string
-  updatedAt: string
+  savings?: string
+  currency: string
+  validity: number // Duration in days
+  emailUsageLimit: number
+  subscription: "MONTHLY" | "QUARTERLY" | "HALF_YEARLY" | "YEARLY"
+  features: string[] // Array of feature strings
+  createdAt: Date
+  updatedAt: Date |null
+  updatedBy?: string | null
 }
 
-const initialPlans: PricingPlan[] = [
-  {
-    id: "1",
-    name: "Monthly",
-    price: 29,
-    period: "month",
-    description: "Perfect for getting started",
-    features: ["Up to 10,000 requests", "Basic analytics", "Email support"],
-    popular: false,
-    active: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-15",
-  },
-  {
-    id: "2",
-    name: "Quarterly",
-    price: 79,
-    originalPrice: 87,
-    period: "3 months",
-    description: "Great for growing teams",
-    features: ["Up to 50,000 requests", "Advanced analytics", "Priority support"],
-    popular: false,
-    active: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-15",
-  },
-  {
-    id: "3",
-    name: "Annual",
-    price: 299,
-    originalPrice: 348,
-    period: "year",
-    description: "Best value for serious users",
-    features: ["Unlimited requests", "Real-time analytics", "24/7 support"],
-    popular: true,
-    active: true,
-    createdAt: "2024-01-15",
-    updatedAt: "2024-01-15",
-  },
-]
+type PricingPlanInput = {
+  name: string
+  description: string
+  price: number
+  period: string
+  popular: boolean
+  savings?: string
+  currency: string
+  validity: number
+  emailUsageLimit: number
+  subscription: "MONTHLY" | "QUARTERLY" | "HALF_YEARLY" | "YEARLY"
+  features: string[]
+}
 
-export default function AdminPage() {
-  const [plans, setPlans] = useState<PricingPlan[]>(initialPlans)
+
+
+export default function AdminPage({initialData}:{initialData: PricingPlan[]}) {
+  const [plans, setPlans] = useState<PricingPlan[]>(initialData)
   const [isFormOpen, setIsFormOpen] = useState(false)
-  const [editingPlan, setEditingPlan] = useState<PricingPlan | null>(null)
+  const [editingId, setEditingId] = useState<string|null>(null)
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; planId: string | null }>({
     open: false,
     planId: null,
@@ -89,66 +69,100 @@ export default function AdminPage() {
   // Form state
   const [formData, setFormData] = useState({
     name: "",
-    price: "",
-    originalPrice: "",
-    period: "",
     description: "",
-    features: "",
+    price: "", // Will be converted to paise
+    period: "",
     popular: false,
-    active: true,
+    savings: "",
+    currency: "INR",
+    validity: "",
+    emailUsageLimit: "100",
+    subscription: "" as "MONTHLY" | "QUARTERLY" | "HALF_YEARLY" | "YEARLY" | "",
+    features: "",
   })
 
-  const resetForm = () => {
-    setFormData({
-      name: "",
-      price: "",
-      originalPrice: "",
-      period: "",
-      description: "",
-      features: "",
-      popular: false,
-      active: true,
-    })
-    setEditingPlan(null)
-    setIsFormOpen(false)
-  }
+const resetForm = () => {
+  setFormData({
+    name: "",
+    description: "",
+    price: "",
+    period: "",
+    popular: false,
+    savings: "",
+    currency: "INR",
+    validity: "",
+    emailUsageLimit: "100",
+    subscription: "",
+    features: "",
+  })
+  setEditingId(null)
+  setIsFormOpen(false)
+}
+
 
   const handleEdit = (plan: PricingPlan) => {
-    setEditingPlan(plan)
+    setEditingId(plan.id)
     setFormData({
       name: plan.name,
-      price: plan.price.toString(),
-      originalPrice: plan.originalPrice?.toString() || "",
-      period: plan.period,
       description: plan.description,
-      features: plan.features.join("\n"),
+      price: (plan.price / 100).toString(), // Convert paise to rupees for display
+      period: plan.period,
       popular: plan.popular,
-      active: plan.active,
+      savings: plan.savings || "",
+      currency: plan.currency,
+      validity: plan.validity.toString(),
+      emailUsageLimit: plan.emailUsageLimit.toString(),
+      subscription: plan.subscription,
+      features: plan.features.join("\n"),
     })
     setIsFormOpen(true)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const newPlan: PricingPlan = {
-      id: editingPlan?.id || Date.now().toString(),
-      name: formData.name,
-      price: Number.parseFloat(formData.price),
-      originalPrice: formData.originalPrice ? Number.parseFloat(formData.originalPrice) : undefined,
-      period: formData.period,
-      description: formData.description,
-      features: formData.features.split("\n").filter((f) => f.trim()),
-      popular: formData.popular,
-      active: formData.active,
-      createdAt: editingPlan?.createdAt || new Date().toISOString().split("T")[0],
-      updatedAt: new Date().toISOString().split("T")[0],
-    }
+    if (editingId) {
+      const updatePayload = {
+        name: formData.name,
+        description: formData.description,
+        price: Math.round(Number.parseFloat(formData.price) * 100), // Convert to paise
+        period: formData.period,
+        popular: formData.popular,
+        savings: formData.savings || undefined,
+        currency: formData.currency,
+        validity: Number.parseInt(formData.validity),
+        emailUsageLimit: Number.parseInt(formData.emailUsageLimit),
+        subscription: formData.subscription as "MONTHLY" | "QUARTERLY" | "HALF_YEARLY" | "YEARLY",
+        features: formData.features.split("\n").filter((f) => f.trim())
+      }
 
-    if (editingPlan) {
-      setPlans(plans.map((p) => (p.id === editingPlan.id ? newPlan : p)))
+      const updateResponse = await updatePricing(updatePayload, editingId)
+
+      if(updateResponse.success){
+        toast("data updated successfully")
+      }
+
+
     } else {
-      setPlans([...plans, newPlan])
+      const createPayload = {
+        name: formData.name,
+        description: formData.description,
+        price: Math.round(Number.parseFloat(formData.price) * 100), // Convert to paise
+        period: formData.period,
+        popular: formData.popular,
+        savings: formData.savings || undefined,
+        currency: formData.currency,
+        validity: Number.parseInt(formData.validity),
+        emailUsageLimit: Number.parseInt(formData.emailUsageLimit),
+        subscription: formData.subscription as "MONTHLY" | "QUARTERLY" | "HALF_YEARLY" | "YEARLY",
+        features: formData.features.split("\n").filter((f) => f.trim()),
+      }
+
+      const addNewPrice = await addPricing(createPayload)
+      if(addNewPrice.success){
+        toast("data added successfully")
+      }
+     
     }
 
     resetForm()
@@ -159,11 +173,16 @@ export default function AdminPage() {
     setDeleteDialog({ open: false, planId: null })
   }
 
+  const formatPrice = (priceInPaise: number, currency: string) => {
+    const price = priceInPaise / 100
+    return currency === "INR" ? `₹${price}` : `$${price}`
+  }
+
   const stats = {
     totalPlans: plans.length,
-    activePlans: plans.filter((p) => p.active).length,
-    averagePrice: Math.round(plans.reduce((sum, p) => sum + p.price, 0) / plans.length),
-    popularPlans: plans.filter((p) => p.popular).length,
+    activePlans: plans.filter((p) => p.popular).length,
+    averagePrice: Math.round(plans.reduce((sum, p) => sum + p.price, 0) / plans.length / 100),
+    totalEmailLimit: plans.reduce((sum, p) => sum + p.emailUsageLimit, 0),
   }
 
   return (
@@ -173,8 +192,8 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600 mt-1">Manage your SaaS pricing plans</p>
+              <h1 className="text-3xl font-bold text-gray-900">Pricing Admin Dashboard</h1>
+              <p className="text-gray-600 mt-1">Manage your SaaS pricing plans and email limits</p>
             </div>
             <Badge variant="secondary" className="bg-red-100 text-red-800">
               Super Admin Access
@@ -202,7 +221,7 @@ export default function AdminPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Active Plans</p>
+                  <p className="text-sm font-medium text-gray-600">Popular Plans</p>
                   <p className="text-3xl font-bold text-green-600">{stats.activePlans}</p>
                 </div>
                 <TrendingUp className="h-8 w-8 text-green-600" />
@@ -215,7 +234,7 @@ export default function AdminPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-600">Avg. Price</p>
-                  <p className="text-3xl font-bold text-purple-600">${stats.averagePrice}</p>
+                  <p className="text-3xl font-bold text-purple-600">₹{stats.averagePrice}</p>
                 </div>
                 <DollarSign className="h-8 w-8 text-purple-600" />
               </div>
@@ -226,10 +245,10 @@ export default function AdminPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Popular Plans</p>
-                  <p className="text-3xl font-bold text-orange-600">{stats.popularPlans}</p>
+                  <p className="text-sm font-medium text-gray-600">Total Email Limit</p>
+                  <p className="text-3xl font-bold text-orange-600">{stats.totalEmailLimit.toLocaleString()}</p>
                 </div>
-                <Users className="h-8 w-8 text-orange-600" />
+                <Mail className="h-8 w-8 text-orange-600" />
               </div>
             </CardContent>
           </Card>
@@ -240,9 +259,11 @@ export default function AdminPage() {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle>{isFormOpen ? (editingPlan ? "Edit Plan" : "Add New Plan") : "Plan Management"}</CardTitle>
+                <CardTitle>
+                  {isFormOpen ? (editingId ? "Edit Pricing Plan" : "Add New Pricing Plan") : "Plan Management"}
+                </CardTitle>
                 <CardDescription>
-                  {isFormOpen ? "Fill in the details below" : "Create and manage your pricing plans"}
+                  {isFormOpen ? "Configure pricing, limits, and features" : "Create and manage your pricing plans"}
                 </CardDescription>
               </div>
               <Button onClick={() => setIsFormOpen(!isFormOpen)} variant={isFormOpen ? "outline" : "default"}>
@@ -268,67 +289,108 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="price">Price ($)</Label>
+                    <Label htmlFor="subscription">Subscription Type</Label>
+                    <Select
+                      value={formData.subscription}
+                      onValueChange={(value: "MONTHLY" | "QUARTERLY" | "HALF_YEARLY" | "YEARLY") =>
+                        setFormData({ ...formData, subscription: value })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select subscription" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MONTHLY">Monthly</SelectItem>
+                        <SelectItem value="QUARTERLY">Quarterly</SelectItem>
+                        <SelectItem value="HALF_YEARLY">Half Yearly</SelectItem>
+                        <SelectItem value="YEARLY">Yearly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="price">Price (₹)</Label>
                     <Input
                       id="price"
                       type="number"
                       step="0.01"
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                      placeholder="29.99"
+                      placeholder="29.00"
+                      required
+                    />
+                    <p className="text-xs text-gray-500 mt-1">Will be stored in paise</p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="period">Display Period</Label>
+                    <Input
+                      id="period"
+                      value={formData.period}
+                      onChange={(e) => setFormData({ ...formData, period: e.target.value })}
+                      placeholder="e.g., month, year"
                       required
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="originalPrice">Original Price ($)</Label>
+                    <Label htmlFor="validity">Validity (Days)</Label>
                     <Input
-                      id="originalPrice"
+                      id="validity"
                       type="number"
-                      step="0.01"
-                      value={formData.originalPrice}
-                      onChange={(e) => setFormData({ ...formData, originalPrice: e.target.value })}
-                      placeholder="39.99 (optional)"
+                      value={formData.validity}
+                      onChange={(e) => setFormData({ ...formData, validity: e.target.value })}
+                      placeholder="30"
+                      required
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="period">Billing Period</Label>
+                    <Label htmlFor="emailUsageLimit">Email Usage Limit</Label>
+                    <Input
+                      id="emailUsageLimit"
+                      type="number"
+                      value={formData.emailUsageLimit}
+                      onChange={(e) => setFormData({ ...formData, emailUsageLimit: e.target.value })}
+                      placeholder="1000"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="currency">Currency</Label>
                     <Select
-                      value={formData.period}
-                      onValueChange={(value) => setFormData({ ...formData, period: value })}
+                      value={formData.currency}
+                      onValueChange={(value) => setFormData({ ...formData, currency: value })}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select period" />
+                        <SelectValue placeholder="Select currency" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="month">Month</SelectItem>
-                        <SelectItem value="3 months">3 Months</SelectItem>
-                        <SelectItem value="6 months">6 Months</SelectItem>
-                        <SelectItem value="year">Year</SelectItem>
-                        <SelectItem value="one-time">One-time</SelectItem>
+                        <SelectItem value="INR">INR (₹)</SelectItem>
+                        <SelectItem value="USD">USD ($)</SelectItem>
+                        <SelectItem value="EUR">EUR (€)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="popular"
-                        checked={formData.popular}
-                        onCheckedChange={(checked) => setFormData({ ...formData, popular: checked })}
-                      />
-                      <Label htmlFor="popular">Popular Plan</Label>
-                    </div>
+                  <div>
+                    <Label htmlFor="savings">Savings Text</Label>
+                    <Input
+                      id="savings"
+                      value={formData.savings}
+                      onChange={(e) => setFormData({ ...formData, savings: e.target.value })}
+                      placeholder="Save 25%"
+                    />
+                  </div>
 
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="active"
-                        checked={formData.active}
-                        onCheckedChange={(checked) => setFormData({ ...formData, active: checked })}
-                      />
-                      <Label htmlFor="active">Active</Label>
-                    </div>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="popular"
+                      checked={formData.popular}
+                      onCheckedChange={(checked) => setFormData({ ...formData, popular: checked })}
+                    />
+                    <Label htmlFor="popular">Mark as Popular</Label>
                   </div>
                 </div>
 
@@ -349,16 +411,17 @@ export default function AdminPage() {
                     id="features"
                     value={formData.features}
                     onChange={(e) => setFormData({ ...formData, features: e.target.value })}
-                    placeholder="Up to 10,000 requests&#10;Basic analytics&#10;Email support"
-                    rows={4}
+                    placeholder="Up to 1,000 emails&#10;Basic analytics&#10;Email support&#10;API access"
+                    rows={5}
                     required
                   />
+                  <p className="text-xs text-gray-500 mt-1">Each line will be saved as a separate feature</p>
                 </div>
 
                 <div className="flex gap-4">
                   <Button type="submit" className="flex-1">
                     <Save className="h-4 w-4 mr-2" />
-                    {editingPlan ? "Update Plan" : "Create Plan"}
+                    {editingId ? "Update Plan" : "Create Plan"}
                   </Button>
                   <Button type="button" variant="outline" onClick={resetForm}>
                     Cancel
@@ -373,17 +436,17 @@ export default function AdminPage() {
         <Card>
           <CardHeader>
             <CardTitle>All Pricing Plans</CardTitle>
-            <CardDescription>Manage your existing pricing plans</CardDescription>
+            <CardDescription>Manage your existing pricing plans and email limits</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Plan Name</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Period</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Plan Details</TableHead>
+                    <TableHead>Price & Savings</TableHead>
+                    <TableHead>Subscription</TableHead>
+                    <TableHead>Limits</TableHead>
                     <TableHead>Features</TableHead>
                     <TableHead>Updated</TableHead>
                     <TableHead className="text-right">Actions</TableHead>
@@ -393,33 +456,57 @@ export default function AdminPage() {
                   {plans.map((plan) => (
                     <TableRow key={plan.id}>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{plan.name}</span>
-                          {plan.popular && (
-                            <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                              Popular
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">{plan.name}</span>
+                            {plan.popular && (
+                              <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                                Popular
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600">{plan.description}</p>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="space-y-1">
+                          <div className="font-bold">{formatPrice(plan.price, plan.currency)}</div>
+                          {plan.savings && (
+                            <Badge variant="outline" className="text-green-600 border-green-200">
+                              {plan.savings}
                             </Badge>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold">${plan.price}</span>
-                          {plan.originalPrice && (
-                            <span className="text-sm text-gray-500 line-through">${plan.originalPrice}</span>
-                          )}
+                        <div className="space-y-1">
+                          <Badge variant="outline">{plan.subscription}</Badge>
+                          <p className="text-sm text-gray-600">per {plan.period}</p>
                         </div>
                       </TableCell>
-                      <TableCell>{plan.period}</TableCell>
                       <TableCell>
-                        <Badge variant={plan.active ? "default" : "secondary"}>
-                          {plan.active ? "Active" : "Inactive"}
-                        </Badge>
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-1 text-sm">
+                            <Calendar className="h-3 w-3" />
+                            {plan.validity} days
+                          </div>
+                          <div className="flex items-center gap-1 text-sm">
+                            <Mail className="h-3 w-3" />
+                            {plan.emailUsageLimit.toLocaleString()} emails
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell>
                         <span className="text-sm text-gray-600">{plan.features.length} features</span>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-600">{plan.updatedAt}</TableCell>
+                      <TableCell className="text-sm text-gray-600">
+                        <div className="space-y-1">
+                          <div>{plan.updatedAt== null?"None":plan.updatedAt.toLocaleDateString()}</div>
+                          <div className="text-xs text-gray-500">
+                            {plan.updatedBy ? `by ${plan.updatedBy}` : "No updates yet"}
+                          </div>
+                        </div>
+                      </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
                           <Button size="sm" variant="outline" onClick={() => handleEdit(plan)}>
@@ -448,9 +535,10 @@ export default function AdminPage() {
       <Dialog open={deleteDialog.open} onOpenChange={(open) => setDeleteDialog({ open, planId: null })}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Delete Plan</DialogTitle>
+            <DialogTitle>Delete Pricing Plan</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this pricing plan? This action cannot be undone.
+              Are you sure you want to delete this pricing plan? This action cannot be undone and will affect all
+              associated subscriptions.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

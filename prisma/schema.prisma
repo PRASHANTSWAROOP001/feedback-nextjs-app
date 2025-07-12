@@ -204,7 +204,7 @@ model ActiveSubscription {
 
 model Pricing {
   id                 String        @id @default(cuid())
-  admin              String        @unique // Clerk ID of the admin who created the plan
+  admin              String        // Clerk ID of the admin who created the plan
   name               String        // e.g., "Monthly"
   description        String        // e.g., "Perfect for getting started"
   price              Int           // Amount in paise (if INR)
