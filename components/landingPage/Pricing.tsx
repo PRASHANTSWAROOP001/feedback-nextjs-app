@@ -1,4 +1,4 @@
-import { Button } from "../ui/button";
+import { redirect } from "next/navigation";
 import { Check } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
@@ -23,6 +23,7 @@ const freePlanFeatures = [
 ];
 
 const paidPlanFeatures = [
+  "Starts From As Low As ₹149",
   "Up to 30 user categories",
   "10,000 feedback submissions/month",
   "Sentiment analysis (AI-powered)",
@@ -78,7 +79,7 @@ export default function Pricing() {
                 Perfect for small teams getting started
               </CardDescription>
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-bold">$0</span>
+                <span className="text-3xl font-bold">₹0</span>
                 <span className="text-muted-foreground">/month</span>
               </div>
             </CardHeader>
@@ -95,13 +96,13 @@ export default function Pricing() {
           {/* Professional Plan */}
           <Card className="border-primary shadow-lg">
             <CardHeader>
-              <Badge className="w-fit"> ✨Coming Soon</Badge>
+              <Badge className="w-fit"> ✨ Live Now</Badge>
               <CardTitle>Professional</CardTitle>
               <CardDescription>
                 For growing teams that need more power
               </CardDescription>
               <div className="flex items-baseline space-x-2">
-                <span className="text-3xl font-bold">$49</span>
+                <span className="text-3xl font-bold">₹149</span>
                 <span className="text-muted-foreground">/month</span>
               </div>
             </CardHeader>
@@ -111,9 +112,10 @@ export default function Pricing() {
                   <FeatureItem text={val} key={index}></FeatureItem>
                 ))}
               </ul>
+              <Link href={"/payment"}>
               <InteractiveHoverButton className="w-full">
-                Join Waitlist
-              </InteractiveHoverButton>
+                Checkout Prices
+              </InteractiveHoverButton></Link>
             </CardContent>
           </Card>
 
@@ -134,7 +136,7 @@ export default function Pricing() {
                 ))}
               </ul>
               <InteractiveHoverButton className="w-full">
-                Spam Waitlist
+                Spam The Waitlist
               </InteractiveHoverButton>
             </CardContent>
           </Card>

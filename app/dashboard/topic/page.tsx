@@ -1,12 +1,10 @@
 "use client";
 import TopicPopover from "@/components/dashboard/TopicPopOver";
-import createTopic from "@/app/action/createTopic";
 import SearchInput from "@/components/category/seachbar";
-import deleteTopic from "@/app/action/topic/deleteTopic";
 import DeleteWorkspacePopover from "@/components/dashboard/DeleteWorkspacepop";
-import editTopic from "@/app/action/topic/editTopic";
 import EditTopicPopover from "@/components/topic/editPopover";
 import { SkeletonCard } from "@/components/shared/SkeltonCard";
+import { editTopic, deleteTopic, createTopic } from "@/app/action/topic/topicActions";
 
 import dynamic from "next/dynamic";
 
