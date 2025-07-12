@@ -20,9 +20,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "../ui/pagination";
-import updateEmail from "@/app/action/email/updateEmail";
 import DeleteWorkspacePopover from "../dashboard/DeleteWorkspacepop";
-import deleteEmail from "@/app/action/email/deleteEmail";
+import { deleteEmail, updateEmail } from "@/app/action/email/emailActions";
 import EditWorkspacePopover from "../dashboard/WorkspaceEditPop";
 export default function EmailTable() {
   const searchParams = useSearchParams();

@@ -16,7 +16,7 @@ import { getAllCategory } from "@/app/action/getAllCategory";
 import addEmail from "@/app/action/addEmail";
 import RouteManageButton from "./ManageButton";
 import { EmailResponse } from "../../types/types";
-import getLatestEmails from "@/app/action/getLatestAddedEmails";
+import { getLatestEmails } from "@/app/action/email/emailActions";
 
 type EmailCardProp = {
     workspaceId:string
