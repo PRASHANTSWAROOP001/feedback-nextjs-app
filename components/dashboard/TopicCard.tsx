@@ -25,7 +25,7 @@ async function TopicCard() {
   ];
 
   return (
-    <Card className="w-full m-2 border-2 flex flex-col min-h-full">
+    <Card className="w-full m-2 border-2 bg-white/70 backdrop-blur-md border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 flex flex-col min-h-full">
       <CardHeader className="pt-2">
         <CardTitle className="flex gap-x-3 items-center justify-center">
           <Tag />

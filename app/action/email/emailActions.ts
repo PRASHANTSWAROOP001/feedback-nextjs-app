@@ -2,6 +2,8 @@
 import { EmailResponse } from "@/types/types"
 import {prisma} from "../../../lib/prisma"
 import z from "zod"
+import { auth } from "@clerk/nextjs/server"
+import { Limelight } from "next/font/google"
 
 export async function deleteEmail(emailId:string):Promise<{success:boolean, message:string}>{
     try {
@@ -115,3 +117,85 @@ export async function getLatestEmails(workspaceId:string,limit:number=3):Promise
         
     }
 }
+
+export async function getMonthlyEmailUseage() {
+
+  try {
+
+    const { userId } = await auth()
+
+    if (!userId) {
+      return { success: false, message: "not logged in log in now" }
+    }
+
+    const workspaceId = await prisma.workspace.findUnique({
+      where: {
+        clerkId: userId
+      },
+      select: {
+        id: true
+      }
+    })
+
+    if (!workspaceId) {
+      return { success: false, message: "create workspace to see dashboard." }
+    }
+
+    const now = new Date()
+
+
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999)
+
+
+    const emailUseage = await prisma.emailUsage.findUnique({
+      where: {
+        workspaceId: workspaceId.id,
+        month: {
+          gte: startOfMonth,
+          lte: endOfMonth
+        }
+      },
+      select: {
+        sentCount: true
+      }
+    })
+
+    return { success: true, message: "fetched successfully", usage: emailUseage?.sentCount }
+
+  } catch (error) {
+    console.error("error happened while getting monthly useage", error);
+    return { success: false, message: "error happened at our side" }
+  }
+}
+
+// export async function allowedEmailQuoteCheck(){
+//   try {
+
+//         const { userId } = await auth()
+
+//     if (!userId) {
+//       return { success: false, message: "not logged in log in now" }
+//     }
+
+//     const checkActiveSubscription = await prisma.activeSubscription.findFirst({
+//     where:{
+//       isCancelled:false,
+//       clerkId:userId
+//     }
+//     })
+
+//     // default free quota per month = 100 emails
+//     // we will send monthly quota
+//     if(!checkActiveSubscription){
+//       return {success:true, message:"no active subscription free limit", limit:100}
+//     }
+
+
+    
+//   } catch (error) {
+    
+//   }
+// }
