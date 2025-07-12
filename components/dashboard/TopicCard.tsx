@@ -9,8 +9,7 @@ import {
 } from "../ui/card";
 import { Badge } from "../ui/badge";
 import TopicPopover from "./TopicPopOver";
-import createTopic from "@/app/action/createTopic";
-import getAllTopics from "@/app/action/getAllTopic";
+import { createTopic, getAllTopics } from "@/app/action/topic/topicActions";
 import { Topic } from "@/app/generated/prisma";
 import { TopicResponse } from "@/types/types";
 import RouteManageButton from "./ManageButton";
