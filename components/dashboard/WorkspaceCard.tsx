@@ -49,20 +49,19 @@ function WorkspaceCard({ id, name, createdAt }: WorkspaceCardProps) {
   },[id,setWorkspaceId])
 
   return (
-    <Card className="relative w-full m-2 border-2 flex flex-col min-h-full">
-      <Badge className="absolute top-2 right-2">
-        {new Date(createdAt).toLocaleDateString()}
-      </Badge>
+    <Card className=" w-full m-2 border-2 flex flex-col min-h-full">
+    
 
       <CardHeader className="pt-2">
         <CardTitle className="flex gap-x-3 items-center justify-center">
           <LaptopMinimal />
-          <h1>Manage Workspace</h1>
+          <h1>Manage {name}</h1>
         </CardTitle>
       </CardHeader>
 
       <CardContent className="flex-grow">
-        <h1 className="text-center text-muted-foreground text-lg">{name}</h1>
+        <h1 className="text-center text-muted-foreground text-sm">{createdAt.toLocaleDateString()}</h1>
+        
       </CardContent>
 
       <CardFooter className="flex items-center justify-between mt-auto">

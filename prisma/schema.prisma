@@ -132,6 +132,8 @@ model EmailUsage {
   updatedAt DateTime? @updatedAt 
 
 }
+
+
 model Order {
   id                String       @id @default(cuid())
   razorPayOrderId   String       @unique

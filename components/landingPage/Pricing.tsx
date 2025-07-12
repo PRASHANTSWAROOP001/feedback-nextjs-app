@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { Check } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { InteractiveHoverButton } from "../magicui/interactive-hover-button";
