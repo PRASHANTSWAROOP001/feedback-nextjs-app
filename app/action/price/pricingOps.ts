@@ -17,6 +17,9 @@ export async function getPricingFeatures() {
     const getPriceDetails = await prisma.pricing.findMany({
       include: {
         features: true
+      },
+      orderBy:{
+        price:"asc"
       }
     })
 
