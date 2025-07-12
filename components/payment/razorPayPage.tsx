@@ -1,16 +1,21 @@
 'use client'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
 import { redirect } from 'next/navigation';
-export default function RazorpayPage() {
+import { Button } from '../ui/button';
+type PaymentProp = {
+  pricingId:string,
+}
+export default function RazorpayPage({pricingId}:PaymentProp) {
     const {user} = useUser()
     const clerkId = user?.id
 
+
     if(!clerkId){
         toast("kindly login before payment")
-        redirect("/signin")
+        return;
     }
 
     console.log("env var", process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID)
@@ -27,10 +32,10 @@ export default function RazorpayPage() {
 
   const handlePayment = async () => {
     // Step 1: Create order via backend
+  
     const res = await axios.post("/api/order", {
-        amount:500,
-        clerkId,
-        subscription:"MONTHLY"
+      pricingId,
+      clerkId
     })
 
     const {order} = res.data
@@ -64,9 +69,11 @@ export default function RazorpayPage() {
 
         const data = await verifyRes.json();
         if (data.success) {
-          alert("Payment verified!");
+          toast("Payment verified!");
+          
         } else {
-          alert("Payment verification failed");
+          toast("Payment verification failed");
+         
         }
       },
       prefill: {
@@ -83,14 +90,9 @@ export default function RazorpayPage() {
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-xl font-bold mb-4">Make a Payment</h1>
-      <button
-        onClick={handlePayment}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Pay ₹500
-      </button>
-    </div>
+      <Button  onClick={handlePayment} size="lg"
+                  className="w-full text-lg py-6 bg-blue-600 hover:bg-blue-700">
+        Continue to Payment
+      </Button>
   );
 }

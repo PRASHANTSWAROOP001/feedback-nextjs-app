@@ -1,7 +1,7 @@
 
 import { NextRequest, NextResponse } from "next/server"
 import Razorpay from "razorpay"
-import z, {ZodError} from "zod"
+import z, {string, ZodError} from "zod"
 import {prisma} from "../../../lib/prisma"
 import crypto from "crypto"
 
@@ -31,9 +31,8 @@ const Subscription = z.enum([
 ])
 
 const orderSchema = z.object({
-    amount:z.number(),
-    clerkId:z.string(),
-    subscription:Subscription
+    pricingId:z.string(),
+    clerkId:z.string()
 })
 
 
@@ -65,19 +64,33 @@ export async function POST(req:NextRequest){
             }, {status:400})
         }
 
+        const fetchPricingPlan = await prisma.pricing.findUnique({
+            where:{
+                id:parsedData.data.pricingId,
+            }
+        })
+
+        if(!fetchPricingPlan){
+            return NextResponse.json({
+                success:false,
+                message:"could not find the plan"
+            }, {status:404})
+        }
+
         const createNewOrder = await razorPay.orders.create({
-            amount:parsedData.data.amount,
-            currency:"INR",
+            amount:fetchPricingPlan.price,
+            currency:fetchPricingPlan.currency,
             receipt:parsedData.data.clerkId,
-            notes: { Subscription: parsedData.data.subscription, clerkId:parsedData.data.clerkId }
+            notes: { Subscription: fetchPricingPlan.subscription, clerkId:parsedData.data.clerkId }
         }) as RazorpayOrderResponse
 
         const saveOrderInDb = await prisma.order.create({
             data:{
-                amount:parsedData.data.amount,
+                amount:fetchPricingPlan.price,
                 clerkId:parsedData.data.clerkId,
-                subscription:parsedData.data.subscription,
-                razorPayOrderId:createNewOrder.id
+                subscription:fetchPricingPlan.subscription,
+                razorPayOrderId:createNewOrder.id,
+                pricingId:parsedData.data.pricingId
             }
         })
 

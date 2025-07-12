@@ -1,23 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Check, Zap, Crown, Infinity } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Check, Zap, Crown, Infinity } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
-
-import { PricingUiData } from "@/app/payment/page"
+} from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { PricingUiData } from "@/app/payment/page";
+import RazorpayPage from "./razorPayPage";
 
 // 🔁 Mapping subscription type to icon
 const planIcons: Record<PricingUiData["subscription"], React.ElementType> = {
@@ -25,24 +22,26 @@ const planIcons: Record<PricingUiData["subscription"], React.ElementType> = {
   QUARTERLY: Check,
   HALF_YEARLY: Crown,
   YEARLY: Infinity,
-}
+};
 
 export default function PaymentDisplay({
   pricingPlans,
 }: {
-  pricingPlans: PricingUiData[]
+  pricingPlans: PricingUiData[];
 }) {
   const [selectedPlan, setSelectedPlan] = useState<string | undefined>(
     pricingPlans[0]?.id
-  )
+  );
 
   const handlePlanSelect = (planId: string) => {
-    setSelectedPlan(planId)
-  }
+    setSelectedPlan(planId);
+  };
 
   const selectedPlanDetails = pricingPlans.find(
     (plan) => plan.id === selectedPlan
-  )
+  );
+
+  console.log("pricingId", selectedPlan)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
@@ -65,8 +64,8 @@ export default function PaymentDisplay({
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
         >
           {pricingPlans.map((plan) => {
-            const Icon = planIcons[plan.subscription] || Zap
-            const isSelected = selectedPlan === plan.id
+            const Icon = planIcons[plan.subscription] || Zap;
+            const isSelected = selectedPlan === plan.id;
 
             return (
               <div key={plan.id} className="relative">
@@ -111,7 +110,7 @@ export default function PaymentDisplay({
                       <div className="mt-4">
                         <div className="flex items-baseline justify-center gap-2">
                           <span className="text-3xl font-bold text-gray-900">
-                            ₹{plan.price/100}
+                            ₹{plan.price / 100}
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 mt-1">
@@ -123,10 +122,7 @@ export default function PaymentDisplay({
                     <CardContent className="pt-0">
                       <ul className="space-y-3">
                         {plan.features.map((feature, index) => (
-                          <li
-                            key={index}
-                            className="flex items-start gap-3"
-                          >
+                          <li key={index} className="flex items-start gap-3">
                             <Check className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                             <span className="text-sm text-gray-700">
                               {feature}
@@ -138,7 +134,7 @@ export default function PaymentDisplay({
                   </Card>
                 </Label>
               </div>
-            )
+            );
           })}
         </RadioGroup>
 
@@ -163,7 +159,7 @@ export default function PaymentDisplay({
                     </span>
                     <div className="text-right">
                       <div className="text-2xl font-bold">
-                        ₹{selectedPlanDetails.price/100}
+                        ₹{selectedPlanDetails.price / 100}
                       </div>
                       <div className="text-sm text-gray-600">
                         per {selectedPlanDetails.period}
@@ -179,12 +175,8 @@ export default function PaymentDisplay({
                   )}
                 </div>
 
-                <Button
-                  size="lg"
-                  className="w-full text-lg py-6 bg-blue-600 hover:bg-blue-700"
-                >
-                  Continue to Payment
-                </Button>
+                <RazorpayPage pricingId=
+                {selectedPlan != undefined ? selectedPlan : ""}></RazorpayPage>
 
                 <p className="text-center text-sm text-gray-500">
                   30-day money-back guarantee • Cancel anytime • Secure payment
@@ -195,5 +187,5 @@ export default function PaymentDisplay({
         )}
       </div>
     </div>
-  )
+  );
 }
