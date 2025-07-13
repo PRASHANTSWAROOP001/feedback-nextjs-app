@@ -63,7 +63,7 @@ export default async function DashboardPage() {
           {data && <EmailCard workspaceId={data.id} />}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-16">
            {/* EmailUsageCard */}
 
                      <Card className="bg-white/70 backdrop-blur-md border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300">

@@ -169,15 +169,21 @@ export async function GET(req: NextRequest) {
         where: {
           topicId,
           ...(search && {
-            emailEntryId: {
+            emailEntry: {
+              email:{
               contains: search,
               mode: "insensitive",
+              }
             },
           }),
         },
         take: limit,
         select: {
-          emailEntryId: true,
+          emailEntry:{ 
+            select:{
+              email:true
+            }
+          },
           id: true,
           used: true,
           sentAt: true,
@@ -193,9 +199,11 @@ export async function GET(req: NextRequest) {
         where: {
           topicId,
           ...(search && {
-            emailEntryId: {
-              contains: search,
+            emailEntry: {
+              email:{
+                contains: search,
               mode: "insensitive",
+              }
             },
           }),
         },

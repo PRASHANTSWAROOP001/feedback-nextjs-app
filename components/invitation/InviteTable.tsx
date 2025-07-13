@@ -38,7 +38,9 @@ interface InvitationData {
   sentAt: Date;
   submittedAt?: Date;
   expiresAt?: Date;
-  emailEntryId: string;
+  emailEntry: {
+    email:string
+  }
   inviteStatus: "SENT" | "FAILED" | "PENDING";
 }
 
@@ -171,7 +173,7 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
                         ? new Date(invite.expiresAt).toLocaleDateString()
                         : "-"}
                     </TableCell>
-                    <TableCell>{invite.emailEntryId}</TableCell>
+                    <TableCell>{invite?.emailEntry.email}</TableCell>
                     <TableCell>
                       {invite.inviteStatus === "SENT" ? (
                         <Badge className="bg-green-100 text-green-800">
