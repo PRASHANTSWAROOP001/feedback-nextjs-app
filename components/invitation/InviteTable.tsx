@@ -56,6 +56,8 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
 
   const router = useRouter();
 
+  console.log(inviteData)
+
   useEffect(() => {
     const fetchInvites = async () => {
       if (selectedTopic === null) {

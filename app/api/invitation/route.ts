@@ -84,6 +84,10 @@ export async function POST(req: NextRequest) {
     .map((r)=>r.value)
     .filter((r)=> r.status === "FAILED")
 
+    console.log(failedInvite,"failedInvite")
+
+    console.log(successfulInvite, "successfulInvite")
+
     //we can add the expiryDate here for inviteSubmission.
 
     if(successfulInvite.length > 0){
@@ -138,7 +142,7 @@ export async function POST(req: NextRequest) {
       failed:successfulInvite.length
     });
 
-    
+
   } catch (error) {
     console.error("Send invite error:", error);
     return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
@@ -179,6 +183,7 @@ export async function GET(req: NextRequest) {
           sentAt: true,
           expiresAt: true,
           submittedAt: true,
+          inviteStatus:true,
         },
         orderBy: {
           sentAt: "desc",
