@@ -71,7 +71,7 @@ export async function getLastHourFeedback() {
             message: "Fetched successfully",
             count: feedbackCount,
             validAverage,
-            lastSent: lastHourFeedback[0].submittedAt
+            lastSent: lastHourFeedback.at(0)?.submittedAt ?? null
         };
 
     } catch (error) {
