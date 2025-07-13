@@ -38,7 +38,8 @@ interface InvitationData {
   sentAt: Date;
   submittedAt?: Date;
   expiresAt?: Date;
-  emailEntryId:string
+  emailEntryId: string;
+  inviteStatus: "SENT" | "FAILED" | "PENDING";
 }
 
 type InviteTableProp = {
@@ -57,8 +58,8 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
 
   useEffect(() => {
     const fetchInvites = async () => {
-      if(selectedTopic === null){
-        toast("Please select a topic")
+      if (selectedTopic === null) {
+        toast("Please select a topic");
         return;
       }
       setLoading(true);
@@ -67,7 +68,7 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
           `/api/invitation?topicId=${selectedTopic}&page=${page}&limit=10`
         );
 
-        console.log(result)
+        console.log(result);
         setInviteData(result.data?.data || []);
         setTotalPages(result?.data?.data?.totalPages || 1);
       } catch (err) {
@@ -100,10 +101,12 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Topic Selector */}
         <div className="flex items-center gap-4">
-          <Select onValueChange={(val) => {
-            setSelectedTopic(val);
-            setPage(1); // reset page on topic change
-          }}>
+          <Select
+            onValueChange={(val) => {
+              setSelectedTopic(val);
+              setPage(1); // reset page on topic change
+            }}
+          >
             <SelectTrigger className="w-64">
               <SelectValue placeholder="Select Topic" />
             </SelectTrigger>
@@ -116,9 +119,7 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
             </SelectContent>
           </Select>
 
-          <Badge variant="outline">
-            Selected: {selectedInviteIds.length}
-          </Badge>
+          <Badge variant="outline">Selected: {selectedInviteIds.length}</Badge>
         </div>
 
         {/* Invite Table */}
@@ -132,21 +133,25 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
                 <TableHead>Submitted At</TableHead>
                 <TableHead>Expires At</TableHead>
                 <TableHead>Email ID</TableHead>
+                <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {inviteData.length > 0 ? (
                 inviteData.map((invite) => (
                   <TableRow key={invite.id}>
-                    <TableCell >
-                      <Checkbox className="py-1"
+                    <TableCell>
+                      <Checkbox
+                        className="py-1"
                         checked={selectedInviteIds.includes(invite.id)}
                         onCheckedChange={() => handleInviteSelect(invite.id)}
                       />
                     </TableCell>
                     <TableCell>
                       {invite.used ? (
-                        <Badge className="bg-green-100 text-green-800">Yes</Badge>
+                        <Badge className="bg-green-100 text-green-800">
+                          Yes
+                        </Badge>
                       ) : (
                         <Badge className="bg-red-100 text-red-800">No</Badge>
                       )}
@@ -164,8 +169,17 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
                         ? new Date(invite.expiresAt).toLocaleDateString()
                         : "-"}
                     </TableCell>
+                    <TableCell>{invite.emailEntryId}</TableCell>
                     <TableCell>
-                      {invite.emailEntryId}
+                      {invite.inviteStatus === "SENT" ? (
+                        <Badge className="bg-green-100 text-green-800">
+                          SENT
+                        </Badge>
+                      ) : (
+                        <Badge className="bg-red-100 text-red-800">
+                          FAILED/PENDING
+                        </Badge>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))
@@ -190,7 +204,10 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
               <Button onClick={() => setPage(1)} disabled={page === 1}>
                 <ChevronsLeft className="w-4 h-4" />
               </Button>
-              <Button onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
+              <Button
+                onClick={() => setPage((p) => p - 1)}
+                disabled={page === 1}
+              >
                 <ChevronLeft className="w-4 h-4" />
               </Button>
               <Button

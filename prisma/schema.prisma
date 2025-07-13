@@ -67,6 +67,12 @@ model CategoryToEmailEntry {
   @@index([emailEntryId])
 }
 
+enum InviteStatus {
+    SENT 
+    FAILED
+    PENDING
+}
+
 model Invitation {
   id           String     @id @default(cuid())
   emailEntryId String
@@ -75,10 +81,12 @@ model Invitation {
   topic        Topic      @relation(fields: [topicId], references: [id], onDelete: Cascade)
   token        String     @unique @default(cuid())
   used         Boolean    @default(false)
-  sentAt       DateTime   @default(now())
+  sentAt       DateTime?  
   submittedAt  DateTime?
   expiresAt    DateTime?  // Consider adding expiration
   feedback     Feedback[]
+  inviteStatus InviteStatus @default(PENDING)
+  error        String?
 
   @@index([emailEntryId])
   @@index([topicId])

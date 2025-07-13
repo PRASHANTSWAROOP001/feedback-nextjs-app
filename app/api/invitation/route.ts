@@ -4,6 +4,14 @@ import crypto from "crypto";
 import { validateQuota } from "@/lib/emailQuota";
 import { sendInviteEmail } from "@/lib/sendInvite";
 
+type InviteResult = {
+  status: "SENT" | "FAILED";
+  emailEntryId: string;
+  token: string;
+  errorMessage: string | null;
+};
+
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -35,16 +43,6 @@ export async function POST(req: NextRequest) {
       where: { id: { in: toInvite } },
     });
 
-    const invites = emailEntries.map((entry) => ({
-      emailEntryId: entry.id,
-      topicId,
-      token: crypto.randomUUID(),
-    }));
-
-    await prisma.$transaction([
-      prisma.invitation.createMany({ data: invites, skipDuplicates: true }),
-    ]);
-
     const topic = await prisma.topic.findUnique({
       where: { id: topicId },
       select: { title: true, description: true },
@@ -53,34 +51,94 @@ export async function POST(req: NextRequest) {
     if (!topic) {
       return NextResponse.json({ success: false, message: "Topic not found" });
     }
+  // lesson how to use Promise.allSettled with custom values to later filter the fulfilled/rejected Promises
+    const result = await Promise.allSettled(
+      emailEntries.map((entry)=>{
+         const token = crypto.randomUUID()
+         const inviteLink = `${process.env.DOMAIN}/invite/?token=${token}`
+         return sendInviteEmail({
+          to:entry.email,
+          inviteLink,
+          topicDescription:topic.description,
+          topicTitle:topic.title
+         }).then<InviteResult>(()=>({
+          status:'SENT' as const,
+          emailEntryId:entry.id,
+          token,
+          errorMessage:null
+         }))
+         .catch<InviteResult>((error)=>({
+           status:'FAILED' as const,
+          emailEntryId:entry.id,
+          token,
+          errorMessage:error?.message || "Unknown error"
+         }))
+      })
+    )
 
-const results = await Promise.allSettled(
-  emailEntries.map((entry) => {
-    const invite = invites.find((i) => i.emailEntryId === entry.id);
-    const inviteLink = `${process.env.DOMAIN}/invite?token=${invite?.token}`;
-    return sendInviteEmail({
-      to: entry.email,
-      inviteLink,
-      topicTitle: topic.title,
-      topicDescription: topic.description,
-    });
-  })
-)
-   results.forEach((r, i) => {
-  if (r.status === "rejected") {
-    console.error(`Failed to send email to ${emailEntries[i].email}:`, r.reason);
-  }
-});
-    const sent = results.filter((r) => r.status === "fulfilled").length;
-    const failed = results.length - sent;
+    const successfulInvite = result.filter((r): r is PromiseFulfilledResult<InviteResult> => r.status === "fulfilled")
+    .map((r)=>r.value)
+    .filter((r)=>r.status === "SENT")
+
+    const failedInvite = result.filter((r): r is PromiseFulfilledResult<InviteResult> => r.status ==="rejected")
+    .map((r)=>r.value)
+    .filter((r)=> r.status === "FAILED")
+
+    //we can add the expiryDate here for inviteSubmission.
+
+    if(successfulInvite.length > 0){
+      await prisma.$transaction(
+        successfulInvite.map((invite)=>
+          prisma.invitation.create({
+            data:{
+              emailEntryId:invite.emailEntryId,
+              token: invite.token,
+              topicId,
+              inviteStatus:"SENT",
+              sentAt:new Date(),
+              error:null
+            }
+          })
+        )
+      )
+    }
+
+
+    if(failedInvite.length > 0){
+      await prisma.$transaction(
+        failedInvite.map((invite)=>
+          prisma.invitation.create({
+            data:{
+              emailEntryId:invite.emailEntryId,
+              topicId,
+              token: invite.token,
+              inviteStatus:"FAILED",
+              error:invite.errorMessage,
+            }
+          })
+        )
+      )
+    }
+
+    await prisma.emailUsage.update({
+      where:{
+        workspaceId
+      },
+      data:{
+        sentCount:{increment: successfulInvite.length}
+      }
+    })
+
 
     return NextResponse.json({
       success: true,
       message: "Processed invites",
       total: emailEntries.length,
-      sent,
-      failed,
+      sent:successfulInvite.length,
+      failed:successfulInvite.length
     });
+
+    
   } catch (error) {
     console.error("Send invite error:", error);
     return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });

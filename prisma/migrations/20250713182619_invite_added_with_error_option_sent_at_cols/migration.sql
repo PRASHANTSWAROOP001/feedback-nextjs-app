@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Invitation" ADD COLUMN     "error" TEXT,
+ALTER COLUMN "sentAt" DROP NOT NULL,
+ALTER COLUMN "sentAt" DROP DEFAULT;
