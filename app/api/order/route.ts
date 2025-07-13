@@ -123,3 +123,16 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+// export async function GET(req:NextRequest){
+//   try {
+    
+//         const {searchParams} = req.nextUrl;
+//         const topicId = searchParams.get("orderId")
+//         const page = parseInt(searchParams.get("page") || "1")
+//         const limit = parseInt(searchParams.get("limit") || "10")
+
+//   } catch (error) {
+    
+//   }
+// }

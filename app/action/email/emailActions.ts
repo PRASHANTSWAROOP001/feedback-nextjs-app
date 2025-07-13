@@ -3,7 +3,7 @@ import { EmailResponse } from "@/types/types"
 import {prisma} from "../../../lib/prisma"
 import z from "zod"
 import { auth } from "@clerk/nextjs/server"
-import { Limelight } from "next/font/google"
+import { Subscription } from "@/app/generated/prisma"
 
 export async function deleteEmail(emailId:string):Promise<{success:boolean, message:string}>{
     try {
@@ -118,6 +118,7 @@ export async function getLatestEmails(workspaceId:string,limit:number=3):Promise
     }
 }
 
+//dashboards email data acccess controllers
 export async function getMonthlyEmailUseage() {
 
   try {
@@ -171,31 +172,45 @@ export async function getMonthlyEmailUseage() {
   }
 }
 
-// export async function allowedEmailQuoteCheck(){
-//   try {
+export async function allowedEmailQuoteCheck(){
+  try {
 
-//         const { userId } = await auth()
+        const { userId } = await auth()
 
-//     if (!userId) {
-//       return { success: false, message: "not logged in log in now" }
-//     }
+    if (!userId) {
+      return { success: false, message: "not logged in log in now" }
+    }
 
-//     const checkActiveSubscription = await prisma.activeSubscription.findFirst({
-//     where:{
-//       isCancelled:false,
-//       clerkId:userId
-//     }
-//     })
+    const checkActiveSubscription = await prisma.activeSubscription.findFirst({
+    where:{
+      isCancelled:false,
+      clerkId:userId
+    }
+    })
 
-//     // default free quota per month = 100 emails
-//     // we will send monthly quota
-//     if(!checkActiveSubscription){
-//       return {success:true, message:"no active subscription free limit", limit:100}
-//     }
+    // default free quota per month = 500 emails
+    // we will send monthly quota
+    if(!checkActiveSubscription){
+      return {success:true, message:"no active subscription free limit", limit:500}
+    }
 
+    const monthlyLimit = await prisma.pricing.findUnique({
+      where:{
+        id:checkActiveSubscription.pricingId
+      }
+    })
+
+    if(!monthlyLimit){
+      return {success:false, message:"please drop a email for support your plan is not linked to any pricing."}
+    }
+
+    return {success:true, message:"fetched successfully", limit:monthlyLimit.emailUsageLimit}
 
     
-//   } catch (error) {
+  } catch (error) {
+
+    console.log("error while fetching user plans", error);
+    return {success:false, message:"error happend while fetching subscription data"}
     
-//   }
-// }
+  }
+}
