@@ -20,6 +20,23 @@ export async function GET(req:NextRequest){
             take:limit,
             orderBy:{
                 submittedAt:"desc"
+            },
+            select:{
+                invitation:{
+                    select:{
+                        emailEntry:{
+                            select:{
+                                email:true
+                            }
+                        }
+                    }
+                },
+                id:true,
+                isAnonymous:true,
+                rating:true,
+                submittedAt:true,
+                topicId:true,
+                content:true,
             }
         }), 
      prisma.feedback.count({where:{

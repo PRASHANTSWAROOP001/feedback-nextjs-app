@@ -1,6 +1,5 @@
-import getAllTopics from "@/app/action/getAllTopic"
+import { getAllTopics } from "@/app/action/topic/topicActions"
 import { Topic } from "@/app/generated/prisma"
-import { TopicResponse } from "@/types/types"
 import FeedbackAdminPage from "@/components/feedback/FeedbackDisplay"
 
 export default async function FeedbackPage(){

@@ -23,10 +23,18 @@ type FeedbackProp = {
 
 const ITEMS_PER_PAGE = 5
 
+interface FeedbackWithEmail extends Feedback{
+  invitation:{
+    emailEntry:{
+      email:string
+    }
+  }
+}
+
 export default function FeedbackAdminPage({ topicArray }: FeedbackProp) {
   const [selectedTopicId, setSelectedTopicId] = useState<string>(topicArray[0]?.id ?? "")
   const [currentPage, setCurrentPage] = useState(1)
-  const [feedbackData, setFeedbackData] = useState<Feedback[]>([])
+  const [feedbackData, setFeedbackData] = useState<FeedbackWithEmail[]>([])
   const [totalFeedbackCount, setTotalFeedbackCount] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
 
@@ -174,11 +182,11 @@ export default function FeedbackAdminPage({ topicArray }: FeedbackProp) {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-10 w-10">
-                      <AvatarFallback>{feedback.isAnonymous ? "?" : "U"}</AvatarFallback>
+                      <AvatarFallback>{feedback.isAnonymous ? "?" : feedback.invitation.emailEntry.email[0]}</AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="font-medium">
-                        {feedback.isAnonymous ? "Anonymous User" : `Id ${feedback.invitationId.slice(-3)}`}
+                        {feedback.isAnonymous ? "Anonymous User" : `${feedback.invitation.emailEntry.email}`}
                       </p>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4" />
