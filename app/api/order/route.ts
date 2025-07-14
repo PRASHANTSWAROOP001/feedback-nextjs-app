@@ -37,6 +37,11 @@ const razorPay = new Razorpay({
   key_secret: process.env.RAZOR_SECRET_ID as string,
 });
 
+// we are taking pricing plan for order creation 
+// find the plan user want to subscribe 
+// then create a order for that subscription plan
+// if user has already an active plan we are not letting them stack plans
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -71,7 +76,7 @@ export async function POST(req: NextRequest) {
         { status: 200 }
       );
     }
-
+   // check subscription user want to pay for
     const fetchPricingPlan = await prisma.pricing.findUnique({
       where: {
         id: parsedData.data.pricingId,
@@ -87,7 +92,7 @@ export async function POST(req: NextRequest) {
         { status: 404 }
       );
     }
-
+    // create new order 
     const createNewOrder = (await razorPay.orders.create({
       amount: fetchPricingPlan.price,
       currency: fetchPricingPlan.currency,
@@ -105,6 +110,7 @@ export async function POST(req: NextRequest) {
         subscription: fetchPricingPlan.subscription,
         razorPayOrderId: createNewOrder.id,
         pricingId: parsedData.data.pricingId,
+        status:"CREATED"
       },
     });
 
