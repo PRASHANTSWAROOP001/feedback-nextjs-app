@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams} from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -32,7 +32,6 @@ const ratingEmojis = [
 ];
 
 export default function FeedbackPage() {
-  const router = useRouter();
   const searchParam = useSearchParams();
   const token = searchParam.get("token")
 
@@ -70,7 +69,7 @@ export default function FeedbackPage() {
         setIsValid(false);
       }
     } catch (err) {
-      setError('Failed to validate token');
+      setError(`Failed to validate token ${err}`);
       setIsValid(false);
     } finally {
       setIsValidating(false);
@@ -101,7 +100,7 @@ export default function FeedbackPage() {
         setError(data.message || 'Failed to submit feedback');
       }
     } catch (err) {
-      setError('Failed to submit feedback');
+      setError(`Failed to submit feedback ${err}}`);
     } finally {
       setIsSubmitting(false);
     }

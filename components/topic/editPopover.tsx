@@ -61,7 +61,7 @@ export default function EditTopicPopover({
         });
       }
     } catch (error) {
-      toast("error happend");
+      toast(`${error} happened`);
     } finally {
       setIsOpen(false);
     }

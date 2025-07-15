@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { addPricing, updatePricing, deletePricing } from "@/app/action/price/pricingOps"
+import { addPricing, updatePricing,} from "@/app/action/price/pricingOps"
 import { useState } from "react"
 import { Plus, Edit, Trash2, Save, X, DollarSign, TrendingUp, Settings, Mail, Calendar } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -41,19 +41,6 @@ export interface PricingPlan {
   updatedBy?: string | null
 }
 
-type PricingPlanInput = {
-  name: string
-  description: string
-  price: number
-  period: string
-  popular: boolean
-  savings?: string
-  currency: string
-  validity: number
-  emailUsageLimit: number
-  subscription: "MONTHLY" | "QUARTERLY" | "HALF_YEARLY" | "YEARLY"
-  features: string[]
-}
 
 
 

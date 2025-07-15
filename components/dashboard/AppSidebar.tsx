@@ -1,5 +1,5 @@
 "use client"
-import {Home, Inbox,Signpost,Handshake, NotebookText, Settings, ScrollText, CreditCard, ShieldUser} from "lucide-react"
+import {Home, Inbox,Signpost,Handshake, NotebookText, Settings, ScrollText, CreditCard} from "lucide-react"
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { useUser } from "@clerk/nextjs"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel, DropdownMenuGroup , DropdownMenuContent} from "../ui/dropdown-menu"

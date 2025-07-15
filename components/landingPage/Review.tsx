@@ -1,6 +1,6 @@
 
 import { Marquee } from "@/components/magicui/marquee";
-import { VelocityScroll } from "../magicui/scroll-based-velocity"; 
+
 const reviews = [
   {
     name: "Ravi Sharma",

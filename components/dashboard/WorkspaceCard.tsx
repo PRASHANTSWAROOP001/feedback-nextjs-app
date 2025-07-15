@@ -12,7 +12,6 @@ import { updateWorkspace, deleteWorkSpace } from "@/app/action/workspace/workspa
 import { LaptopMinimal } from "lucide-react";
 import DeleteWorkspacePopover from "./DeleteWorkspacepop";
 import EditWorkspacePopover from "./WorkspaceEditPop";
-import { Badge } from "../ui/badge";
 import { toast } from "sonner";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { useEffect } from "react";

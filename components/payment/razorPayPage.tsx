@@ -1,9 +1,8 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { toast } from 'sonner';
 import axios from 'axios';
 import { useUser } from '@clerk/nextjs';
-import { redirect } from 'next/navigation';
 import { Button } from '../ui/button';
 type PaymentProp = {
   pricingId:string,

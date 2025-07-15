@@ -76,6 +76,7 @@ export default function InviteTable({ topicArray }: InviteTableProp) {
         setInviteData(result.data?.data || []);
         setTotalPages(result?.data?.data?.totalPages || 1);
       } catch (err) {
+        console.log(err)
         toast("Error fetching invites");
       } finally {
         setLoading(false);
