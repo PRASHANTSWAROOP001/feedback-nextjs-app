@@ -1,5 +1,5 @@
 "use client"
-import {Home, Inbox,Signpost,Handshake, NotebookText, Settings, ScrollText} from "lucide-react"
+import {Home, Inbox,Signpost,Handshake, NotebookText, Settings, ScrollText, CreditCard, ShieldUser} from "lucide-react"
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { useUser } from "@clerk/nextjs"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuLabel, DropdownMenuGroup , DropdownMenuContent} from "../ui/dropdown-menu"
@@ -24,6 +24,11 @@ const items = [
     title: "Home",
     url: "/",
     icon: Home,
+  },
+    {
+    title:"Dashboard",
+    url:"/dashboard",
+    icon:Settings
   },
   {
     title:"Topic",
@@ -52,10 +57,10 @@ const items = [
     icon: NotebookText,
   },
   {
-    title:"Dashboard",
-    url:"/dashboard",
-    icon:Settings
-  }
+    title:"Order",
+    url:"/dashboard/order",
+    icon:CreditCard
+  },
 ]
 
 export function AppSidebar() {
