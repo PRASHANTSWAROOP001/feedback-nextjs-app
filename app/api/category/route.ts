@@ -22,27 +22,41 @@ export async function GET(req:NextRequest){
     NextResponse.json({error:"missing workspaceId param"}, {status:400})
   }
 
-  const where:any = {
-    workspaceId
-  }
+  // const where:any = {
+  //   workspaceId
+  // }
 
-  if(search){
-    where.name = {
-    contains:search,
-    mode:"insensitive",
-    }
-  }
+  // if(search){
+  //   where.name = {
+  //   contains:search,
+  //   mode:"insensitive",
+  //   }
+  // }
 
   const [categories, total] = await Promise.all([
     prisma.category.findMany({
-      where,
+      where:{
+        ...(search && {
+          name:{
+            contains:search,
+            mode:"insensitive"
+          }
+        })   
+      },
       skip,
       take:limit,
       orderBy:{
         createdAt:"desc"
       }
     }),
-    prisma.category.count({where:where})
+    prisma.category.count({where:{
+      ...(search && {
+        name:{
+          contains:search,
+          mode:"insensitive"
+        }
+      })
+    }})
   ]) 
 
       return NextResponse.json({

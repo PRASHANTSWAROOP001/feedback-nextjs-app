@@ -45,22 +45,21 @@ export default function FeedbackPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  useEffect(() => {
-    validateToken();
-  }, [token]);
+useEffect(() => {
+  if (!token) {
+    toast("missing the token data");
+    return;
+  }
 
   const validateToken = async () => {
+    setIsValidating(true);
 
-    if(!token){
-      toast("missing token data")
-      return;
-    }
     try {
       const response = await fetch(`/api/validate/?token=${token}`);
       const data = await response.json();
 
-      console.log(data)
-      
+      console.log(data);
+
       if (data.success) {
         setIsValid(true);
         setTokenData(data.data);
@@ -75,6 +74,12 @@ export default function FeedbackPage() {
       setIsValidating(false);
     }
   };
+
+  validateToken();
+}, [token]);
+
+
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

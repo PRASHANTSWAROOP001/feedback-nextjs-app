@@ -3,15 +3,16 @@ import TopicPopover from "@/components/dashboard/TopicPopOver";
 import SearchInput from "@/components/category/seachbar";
 import DeleteWorkspacePopover from "@/components/dashboard/DeleteWorkspacepop";
 import EditTopicPopover from "@/components/topic/editPopover";
-import { SkeletonCard } from "@/components/shared/SkeltonCard";
 import { editTopic, deleteTopic, createTopic } from "@/app/action/topic/topicActions";
+import PaginatedList from "@/components/category/PaginatedList";
 
-import dynamic from "next/dynamic";
 
-const PaginatedList = dynamic(()=>import("@/components/category/PaginatedList"), {
-  ssr:false,
-  loading:()=><SkeletonCard></SkeletonCard>
-})
+
+interface TopicData{
+  id:string,
+  title:string,
+  description:string
+}
 
 export default function TopicMainPage() {
   return (
@@ -32,34 +33,34 @@ export default function TopicMainPage() {
         </div>
       </div>
       <div className="px-4">
-        <PaginatedList
+        <PaginatedList<TopicData>
           fetchUrl="/api/topic"
           queryKey="topic"
-          renderItem={(cat: any) => (
+          renderItem={(topic: TopicData) => (
             <li
-              key={cat.id}
+              key={topic.id}
               className="p-4 rounded border border-gray-300 shadow-sm flex justify-between items-start flex-wrap gap-y-2"
             >
               <div className="flex w-full items-center justify-between ">
                 <span className="text-lg font-medium text-gray-800">
-                  {cat.title}
+                  {topic.title}
                 </span>
                 <div className="flex gap-x-2">
                   <EditTopicPopover
-                    id={cat.id}
-                    currentDescription={cat.description}
-                    currentTitle={cat.title}
+                    id={topic.id}
+                    currentDescription={topic.description}
+                    currentTitle={topic.title}
                     handleEdit={editTopic}
                   ></EditTopicPopover>
                   <DeleteWorkspacePopover
                     handleDelete={deleteTopic}
-                    id={cat.id}
+                    id={topic.id}
                   ></DeleteWorkspacePopover>
                 </div>
               </div>
               <div className="pt-2">
                 <span className="text-sm text-muted-foreground">
-                  {cat.description}
+                  {topic.description}
                 </span>
               </div>
             </li>

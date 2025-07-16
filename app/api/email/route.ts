@@ -11,6 +11,10 @@ const emailSchema = z.object({
 
 type emailRow = z.infer<typeof emailSchema>
 
+interface CsvRow {
+  email?: string; // CSV might have missing or empty values
+}
+
 
 export async function POST(req: NextRequest) {
 
@@ -43,11 +47,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, message: "CSV parsing failed" }, { status: 400 });
     }
 
-    const emailData = result.data as any[]
+const emailData: CsvRow[] = result.data as CsvRow[];
 
-    const validRows: emailRow[] = []
-
-    const invalidRows: { row: any, error: any }[] = []
+const validRows: emailRow[] = [];
+const invalidRows: { row: CsvRow; error: string }[] = [];
 
     for (const row of emailData) {
       const parsed = emailSchema.safeParse({
@@ -181,28 +184,28 @@ export async function GET(req: NextRequest) {
 
     const skip = (page - 1) * limit;
 
-    const where: any = {
-      workspaceId,
-    };
 
-    if (categoryId) {
-      where.categories = {
-        some: {
-          categoryId,
-        },
-      };
-    }
 
-    if (search) {
-      where.email = {
-        contains: search,
-        mode: "insensitive",
-      };
-    }
+
 
     const [emails, count] = await Promise.all([
       prisma.emailEntry.findMany({
-        where,
+        where:{
+          workspaceId:workspaceId,
+          ...(categoryId && {
+            categories:{
+              some:{
+                categoryId:categoryId
+              }
+            }
+          }), 
+          ...(search && {
+            email:{
+              mode:"insensitive",
+              contains:search
+            }
+          })
+        },
         skip,
         take: limit,
         orderBy: {
@@ -215,7 +218,22 @@ export async function GET(req: NextRequest) {
           createdAt: true,
         },
       }),
-      prisma.emailEntry.count({ where }),
+      prisma.emailEntry.count({where:{
+        workspaceId,
+        ...(categoryId && {
+          categories:{
+            some:{
+              categoryId:categoryId
+            }
+          }
+        }),
+        ...(search &&{
+          email:{
+            contains:"search",
+            mode:"insensitive"
+          }
+        })
+      } }),
     ]);
 
     return NextResponse.json({

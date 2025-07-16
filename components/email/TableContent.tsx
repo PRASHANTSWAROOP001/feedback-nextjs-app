@@ -23,6 +23,15 @@ import {
 import DeleteWorkspacePopover from "../dashboard/DeleteWorkspacepop";
 import { deleteEmail, updateEmail } from "@/app/action/email/emailActions";
 import EditWorkspacePopover from "../dashboard/WorkspaceEditPop";
+
+interface EmailData{
+  id:string,
+  email:string,
+  createdAt:Date,
+  updatedAt: Date|null
+}
+
+
 export default function EmailTable() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
@@ -30,7 +39,7 @@ export default function EmailTable() {
   const workspaceId = searchParams.get("workspaceId");
   const categoryId = searchParams.get("categoryId");
   const [loading, setLoading] = useState<boolean>(true);
-  const [email, setEmail] = useState<any[]>([]);
+  const [email, setEmail] = useState<EmailData[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
 
   useEffect(() => {

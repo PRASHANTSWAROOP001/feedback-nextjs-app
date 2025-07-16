@@ -23,27 +23,41 @@ export async function GET(req: NextRequest) {
             return NextResponse.json({ error: "missing workspaceId param" }, { status: 400 })
         }
 
-        const where: any = {
-            workspaceId
-        }
+        // const where: any = {
+        //     workspaceId
+        // }
 
-        if (search) {
-            where.title = {
-                contains: search,
-                mode: "insensitive",
-            }
-        }
+        // if (search) {
+        //     where.title = {
+        //         contains: search,
+        //         mode: "insensitive",
+        //     }
+        // }
 
         const [topics, total] = await Promise.all([
             prisma.topic.findMany({
-                where,
+                where:{
+                    ...(search && {
+                        title:{
+                            contains:search,
+                            mode:"insensitive"
+                        }
+                    })
+                },
                 skip,
                 take: limit,
                 orderBy: {
                     createdAt: "desc"
                 }
             }),
-            prisma.topic.count({ where })
+            prisma.topic.count({ where:{
+                ...(search && {
+                    title:{
+                        contains:search,
+                        mode:"insensitive"
+                    }
+                })
+            } })
         ])
 
         return NextResponse.json({
