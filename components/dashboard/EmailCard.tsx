@@ -10,7 +10,7 @@ import {
 import { Badge } from "../ui/badge";
 
 import EmailPopover from "./EmailPopover";
-import { Category, EmailEntry } from "@/app/generated/prisma"
+import { Category, EmailEntry } from "@prisma/client"
 import {CategoryResponse} from "../../types/types"
 import { getAllCategory } from "@/app/action/getAllCategory";
 import addEmail from "@/app/action/addEmail";

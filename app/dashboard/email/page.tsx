@@ -1,6 +1,6 @@
 import addEmail from "@/app/action/addEmail";
 import EmailPagePopover from "@/components/email/emailPagePopover";
-import { Category } from "@/app/generated/prisma";
+import { Category } from "@prisma/client";
 import { CategoryResponse } from "../../../types/types";
 import { getAllCategory } from "@/app/action/getAllCategory";
 import UploadEmailCard from "@/components/email/UploadCard";

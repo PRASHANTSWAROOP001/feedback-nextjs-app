@@ -1,9 +1,9 @@
 import { Mail} from "lucide-react";
 import { getAllCategory } from "@/app/action/getAllCategory";
 import { getAllTopics } from "@/app/action/topic/topicActions";
-import { Topic } from "@/app/generated/prisma";
+import { Topic } from "@prisma/client";
 import { TopicResponse } from "@/types/types";
-import { Category } from "@/app/generated/prisma";
+import { Category } from "@prisma/client";
 import { CategoryResponse } from "@/types/types";
 import dynamic from "next/dynamic";
 import { SkeletonCard } from "@/components/shared/SkeltonCard";

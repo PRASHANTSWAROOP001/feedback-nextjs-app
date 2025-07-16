@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { parse } from "papaparse"
 import { prisma } from "../../../lib/prisma"
 import z from "zod";
-import {EmailEntry } from "@/app/generated/prisma";
+import {EmailEntry } from "@prisma/client";
 
 
 const emailSchema = z.object({

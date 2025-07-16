@@ -1,5 +1,5 @@
 import { getPricingFeatures } from "../action/price/pricingOps"
-import { Pricing, Feature } from "../generated/prisma"
+import { Pricing, Feature } from "@prisma/client"
 
 function mapPricingToClient(plan: PricingRawData): PricingUiData {
   return {

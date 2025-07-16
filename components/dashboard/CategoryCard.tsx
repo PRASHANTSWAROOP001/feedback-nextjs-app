@@ -10,7 +10,7 @@ import {
 import { Badge } from "../ui/badge";
 import ReusablePopover from "./AddCategory";
 import { getAllCategory } from "@/app/action/getAllCategory";
-import { Category } from "@/app/generated/prisma";
+import { Category } from "@prisma/client";
 import { CategoryResponse } from "@/types/types";
 import createCategory from "@/app/action/createCategory";
 import RouteManageButton from "./ManageButton";

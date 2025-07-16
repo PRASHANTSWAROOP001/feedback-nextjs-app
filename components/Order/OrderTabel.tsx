@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { OrderStatus } from "@/app/generated/prisma";
+import { OrderStatus } from "@prisma/client";
 import {
   Table,
   TableBody,

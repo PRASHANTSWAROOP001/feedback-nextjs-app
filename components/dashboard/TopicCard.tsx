@@ -10,7 +10,7 @@ import {
 import { Badge } from "../ui/badge";
 import TopicPopover from "./TopicPopOver";
 import { createTopic, getAllTopics } from "@/app/action/topic/topicActions";
-import { Topic } from "@/app/generated/prisma";
+import { Topic } from "@prisma/client";
 import { TopicResponse } from "@/types/types";
 import RouteManageButton from "./ManageButton";
 async function TopicCard() {

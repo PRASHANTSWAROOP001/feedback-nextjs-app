@@ -1,5 +1,5 @@
 import { getAllTopics } from "@/app/action/topic/topicActions"
-import { Topic } from "@/app/generated/prisma"
+import { Topic } from "@prisma/client"
 import FeedbackAdminPage from "@/components/feedback/FeedbackDisplay"
 
 export default async function FeedbackPage(){

@@ -1,5 +1,5 @@
 import { getPricingFeatures } from "@/app/action/price/pricingOps"
-import { Pricing, Feature } from "@/app/generated/prisma"
+import { Pricing, Feature } from "@prisma/client"
 import { auth } from "@clerk/nextjs/server"
 import { redirect } from "next/navigation"
 interface PricingWithFeature extends Pricing{
