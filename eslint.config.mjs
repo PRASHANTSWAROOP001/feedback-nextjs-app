@@ -20,6 +20,7 @@ const eslintConfig = [
       "app/generated",
       "components/magicui",
       "components/ui",
+      "components/payment/razorPayPage.tsx",
       "hooks",
     ],
   },
