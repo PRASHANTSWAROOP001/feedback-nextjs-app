@@ -94,7 +94,7 @@ Admins can create feedback topics, group users into categories, invite them via 
 
 ## 🗄️ Database Schema
 
-View the interactive schema on [DrawSQL](https://drawsql.app/your-project-name/diagrams/feedback-schema).
+View the interactive schema on [DrawSQL](https://drawsql.app/teams/prashant-swaroop/diagrams/feedbacksass).
 
 ---
 
