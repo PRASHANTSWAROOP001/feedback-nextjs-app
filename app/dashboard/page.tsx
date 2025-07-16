@@ -1,4 +1,4 @@
-
+const dynamic = "force-dynamic";
 import DashboardDialog from "@/components/dashboard/DialogDashboard";
 import { findWorkspace } from "../action/workspace/workspace";
 import {
@@ -9,7 +9,7 @@ import {
   getMonthlyEmailUseage,
   allowedEmailQuoteCheck,
 } from "../action/email/emailActions";
-import dynamic from "next/dynamic";
+import NextDynamic from "next/dynamic";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -41,18 +41,18 @@ import {
 } from "../action/subscription/subscription";
 
 // Lazy-load the big components
-const WorkspaceCard = dynamic(
+const WorkspaceCard = NextDynamic(
   () => import("@/components/dashboard/WorkspaceCard"),
   { ssr: true }
 );
-const CategoryCard = dynamic(
+const CategoryCard = NextDynamic(
   () => import("@/components/dashboard/CategoryCard"),
   { ssr: true }
 );
-const TopicCard = dynamic(() => import("@/components/dashboard/TopicCard"), {
+const TopicCard = NextDynamic(() => import("@/components/dashboard/TopicCard"), {
   ssr: true,
 });
-const EmailCard = dynamic(() => import("@/components/dashboard/EmailCard"), {
+const EmailCard = NextDynamic(() => import("@/components/dashboard/EmailCard"), {
   ssr: true,
 });
 
