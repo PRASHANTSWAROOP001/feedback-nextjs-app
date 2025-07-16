@@ -27,7 +27,7 @@ async function editCategory(id:string, newName:string):Promise<{success:boolean,
         return {success:true, message:"updated successfully"}
 
     } catch (error) {
-        console.error("error while updating the catergory")
+        console.error("error while updating the catergory", error)
 
         return {success:false, message:"error while updating category"}
     }

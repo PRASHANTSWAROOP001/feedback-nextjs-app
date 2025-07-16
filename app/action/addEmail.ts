@@ -22,7 +22,7 @@ async function addEmail(email: string, category: string, workspaceId: string): P
     }
 
 
-    const addEmails = await prisma.emailEntry.create({
+     await prisma.emailEntry.create({
       data: {
         email: email,
         workspaceId: workspaceId,

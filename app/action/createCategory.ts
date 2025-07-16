@@ -26,7 +26,7 @@ async function createCategory(name:string):Promise<{success:boolean, message:str
             return {success:false, message:"create a workspace first."}
         }
 
-        const createCategory = await prisma.category.create({
+        await prisma.category.create({
             data:{
                 name:name,
                 workspaceId:findWorkspace.id

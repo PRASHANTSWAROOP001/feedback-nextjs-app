@@ -13,7 +13,7 @@ export  async function deleteTopic(id:string):Promise<{success:boolean, message:
         }
 
 
-        const deleteTopicWithId = await prisma.topic.delete({
+         await prisma.topic.delete({
             where:{
                 id:id
             }
@@ -80,7 +80,7 @@ export async function createTopic(title:string, description:string):Promise<{suc
         }
 
 
-        const topicDetails =await prisma.topic.create({
+        await prisma.topic.create({
             data:{
                 title:title,
                 description:description,

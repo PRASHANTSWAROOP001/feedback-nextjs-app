@@ -10,6 +10,21 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // ✅ Ignore specific folders in ESLint v9+
+  {
+    ignores: [
+      "node_modules",
+      ".next",
+      "dist",
+      ".prisma",
+      "app/generated",
+      "components/magicui",
+      "components/ui",
+      "hooks",
+    ],
+  },
+
+  // ✅ Use existing Next.js + TypeScript config via compat
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 

@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { SkeletonCard } from "../shared/SkeltonCard";
 
 interface OrderResponse{
   status:OrderStatus,
@@ -81,6 +82,10 @@ export default function OrderTable() {
     fetchOrders();
   }, [searchQuery, page, selectedFilter]);
 
+  if(loading){
+    return <SkeletonCard></SkeletonCard>
+  }
+  
   return (
     <div className="min-h-screen bg-gray-50/30 p-4 md:p-6 lg:p-8">
       <div className="max-w-5xl mx-auto space-y-6">

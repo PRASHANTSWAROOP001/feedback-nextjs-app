@@ -49,8 +49,6 @@ const pricingSchema = z.object({
   features: z.array(z.string())
 })
 
-type PricingType = z.infer<typeof pricingSchema>
-
 export async function addPricing(data: unknown) {
   try {
     const parsedPricingData = pricingSchema.safeParse(data);

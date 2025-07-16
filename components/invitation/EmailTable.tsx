@@ -165,7 +165,7 @@ export default function EmailTable({ categoryArray, topicArray}: EmailTableProp)
         setSelectedEmails([]);
       }
     } catch (error) {
-      toast("error happend while sending invites");
+      toast(`error happend while sending invites ${error}`, );
     }
   };
 

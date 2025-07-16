@@ -11,7 +11,6 @@ import {
 import dynamic from "next/dynamic";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -22,7 +21,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import {
-  Bell,
+
   Calendar,
   CheckCircle,
   CreditCard,
@@ -32,7 +31,7 @@ import {
   Send,
   Star,
   TrendingUp,
-  User,
+
   Users,
 } from "lucide-react";
 import {

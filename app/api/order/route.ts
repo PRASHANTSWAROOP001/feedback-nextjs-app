@@ -20,14 +20,14 @@ type RazorpayOrderResponse = {
   created_at: number;
 };
 
-const Subscription = z.enum(["MONTHLY", "QUARTERLY", "HALF_YEARLY", "YEARLY"]);
+// const Subscription = z.enum(["MONTHLY", "QUARTERLY", "HALF_YEARLY", "YEARLY"]);
 
 const orderSchema = z.object({
   pricingId: z.string(),
   clerkId: z.string(),
 });
 
-type orderType = z.infer<typeof orderSchema>;
+
 
 if (!process.env.RAZOR_KEY_ID || !process.env.RAZOR_SECRET_ID) {
   throw new Error("Razorpay environment variables are missing");
@@ -104,7 +104,7 @@ export async function POST(req: NextRequest) {
       },
     })) as RazorpayOrderResponse;
 
-    const saveOrderInDb = await prisma.order.create({
+    await prisma.order.create({
       data: {
         amount: fetchPricingPlan.price,
         clerkId: parsedData.data.clerkId,

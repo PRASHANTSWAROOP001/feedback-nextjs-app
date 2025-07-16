@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { parse } from "papaparse"
 import { prisma } from "../../../lib/prisma"
 import z from "zod";
-import { CategoryToEmailEntry, EmailEntry } from "@/app/generated/prisma";
+import {EmailEntry } from "@/app/generated/prisma";
 
 
 const emailSchema = z.object({
@@ -101,7 +101,7 @@ export async function POST(req: NextRequest) {
 
       // now link new email with category and add it to the pivot table
 
-      const linkNewEmails = await tx.categoryToEmailEntry.createMany({
+      await tx.categoryToEmailEntry.createMany({
         data:addNewEmails.map((data)=>(
           {
             emailEntryId:data.id,

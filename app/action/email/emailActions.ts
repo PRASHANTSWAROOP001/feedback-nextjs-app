@@ -3,7 +3,6 @@ import { EmailResponse } from "@/types/types"
 import {prisma} from "../../../lib/prisma"
 import z from "zod"
 import { auth } from "@clerk/nextjs/server"
-import { Subscription } from "@/app/generated/prisma"
 
 export async function deleteEmail(emailId:string):Promise<{success:boolean, message:string}>{
     try {
@@ -35,7 +34,7 @@ const emailSchema = z.object({
   email: z.string().trim().email("Please provide a valid email")
 })
 
-type emailType = z.infer<typeof emailSchema>
+
 
 export async function updateEmail(emailId: string, newEmail: string): Promise<{ success: boolean; message: string }> {
   try {

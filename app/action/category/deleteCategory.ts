@@ -1,6 +1,5 @@
 "use server"
 
-import { auth } from "@clerk/nextjs/server"
 import {prisma }from "../../../lib/prisma"
 import { revalidatePath } from "next/cache"
 
@@ -25,7 +24,7 @@ async function deleteCategory(id:string):Promise<{success:boolean, message:strin
 
     } catch (error) {
 
-        console.error("error happend while deleting the category")
+        console.error("error happend while deleting the category", error)
         
         return {success:false, message:"error happend"}
         

@@ -84,7 +84,7 @@ async function deleteWorkSpace(id:string):Promise<{success:boolean, message:stri
             return {success:false, message:"Could not find the workspace with given id"}
         }
 
-        const deletedWorkspace = await prisma.workspace.delete({
+         await prisma.workspace.delete({
             where:{
                 id:id
             }
@@ -131,7 +131,7 @@ async function updateWorkspace(id:string, name:string){
         return {success:true, message:"success"}
 
     } catch (error) {
-        console.error("error happend while updating workspace");
+        console.error("error happend while updating workspace", error);
         return {success:false, message:"error happened"}
     }
 }
