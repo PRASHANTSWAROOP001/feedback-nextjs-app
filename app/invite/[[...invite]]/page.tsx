@@ -165,7 +165,7 @@ useEffect(() => {
             Share Your Feedback
           </CardTitle>
           <CardDescription className="text-lg text-gray-600">
-            We'd love to hear your thoughts and experiences
+            We&apos;d love to hear your thoughts and experiences
           </CardDescription>
         </CardHeader>
         

@@ -24,7 +24,7 @@ export default function WhyPage() {
             Why I Built This 🚀
           </h1>
             <p className="max-w-2xl  md:text-lg">
-            Feedback tools shouldn't feel like tax forms. 
+            Feedback tools shouldn&apos;t feel like tax forms. 
             I built this because Google Forms were too boring, and feedback felt like a chore — name, email, too many fields, and zero soul.
             So I made a system that cuts the friction: magic link → write → done. 
             Human, fast, and built for real teams where voices matter.

@@ -63,7 +63,7 @@ export default function Pricing() {
               Simple, Transparent Pricing
             </h2>
             <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-              Choose the plan that's right for your team. Upgrade or downgrade
+              Choose the plan that&apos;s right for your team. Upgrade or downgrade
               at any time.
             </p>
           </div>

@@ -8,7 +8,7 @@ const steps = [
     description: "Sign up in seconds — no credit card needed.",
     href: "/docs#get-started",
     cta: "Get started",
-    background: <img className="absolute -right-20 -top-20 opacity-10" />,
+    background: <img className="absolute -right-20 -top-20 opacity-10" alt="decoration" />,
     className: "lg:col-span-1",
   },
   {
@@ -17,7 +17,7 @@ const steps = [
     description: "Organize by team, project, or client — however you work.",
     href: "/docs#workspace",
     cta: "Learn more",
-    background: <img className="absolute -right-20 -top-20 opacity-10" />,
+    background: <img className="absolute -right-20 -top-20 opacity-10" alt="decoration" />,
     className: "lg:col-span-1",
   },
   {
@@ -26,7 +26,7 @@ const steps = [
     description: "Structure feedback for features, bugs, ideas and more.",
     href: "/docs#categories",
     cta: "See example",
-    background: <img className="absolute -right-20 -top-20 opacity-10" />,
+    background: <img className="absolute -right-20 -top-20 opacity-10" alt="decoration" />,
     className: "lg:col-span-1",
   },
   {
@@ -35,7 +35,7 @@ const steps = [
     description: "Send invite links via email — no login needed to respond.",
     href: "/docs#invites",
     cta: "How it works",
-    background: <img className="absolute -right-20 -top-20 opacity-10" />,
+    background: <img className="absolute -right-20 -top-20 opacity-10" alt="decoration" />,
     className: "lg:col-span-1",
   },
 ];
@@ -60,47 +60,6 @@ export default function HowItWorksSection() {
           <BentoCard key={step.name} {...step} />
         ))}
       </div>
-
-      {/* Terminal - same width as 2 cards + gap */}
-      {/* <div className="w-full flex items-center justify-center py-16 px-4">
-        <div className="w-full max-w-3xl mx-auto flex justify-center items-center">
-          <Terminal>
-            <TypingAnimation>&gt; npx feedback-app init</TypingAnimation>
-
-            <AnimatedSpan delay={1500} className="text-green-500">
-              <span>✔ Creating your account...</span>
-            </AnimatedSpan>
-
-            <AnimatedSpan delay={2000} className="text-green-500">
-              <span>✔ Setting up workspace: "Acme Inc"</span>
-            </AnimatedSpan>
-
-            <AnimatedSpan delay={2500} className="text-green-500">
-              <span>✔ Added categories: Features, Bugs, Ideas</span>
-            </AnimatedSpan>
-
-            <AnimatedSpan delay={3000} className="text-green-500">
-              <span>✔ Created feedback topic: "New Dashboard Design"</span>
-            </AnimatedSpan>
-
-            <AnimatedSpan delay={3500} className="text-green-500">
-              <span>✔ Generated magic invite link</span>
-            </AnimatedSpan>
-
-            <AnimatedSpan delay={4000} className="text-blue-500">
-              <span>ℹ Link shared with 10 users</span>
-            </AnimatedSpan>
-
-            <TypingAnimation delay={4500} className="text-muted-foreground">
-              Feedback rolling in... 📬
-            </TypingAnimation>
-
-            <TypingAnimation delay={5000} className="text-muted-foreground">
-              Time to act on insights 🚀
-            </TypingAnimation>
-          </Terminal>
-        </div>
-      </div> */}
     </section>
   );
 }
