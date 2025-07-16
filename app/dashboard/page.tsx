@@ -1,4 +1,4 @@
-const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 import DashboardDialog from "@/components/dashboard/DialogDashboard";
 import { findWorkspace } from "../action/workspace/workspace";
 import {
