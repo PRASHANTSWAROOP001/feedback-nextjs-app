@@ -1,54 +1,83 @@
-# Feedback Collection Platform
+# 🗳️ Feedback Collection Platform
 
 ## 🚀 What I Built
 
-This is a feedback collection platform designed for ease and accountability. It allows an **admin** to create a **topic** (e.g., for alpha testing), define **categories** to manage email segments, and then collect structured feedback through a **frictionless magic link**.
+A structured and frictionless **feedback collection platform** built for teams that value **clarity**, **accountability**, and **ease of use**.
 
-### 🧩 How It Works
-
-1. Admin creates a topic to collect feedback.
-2. Admin defines a category to group emails (e.g., testers, users).
-3. Admin uploads a `.csv` with emails (with `email` as header).
-4. Users are sent invite links via email.
-5. Users click the **magic link** and submit their feedback directly.
-6. No more Google Forms. Just clean, accountable feedback collection.
+Admins can create feedback topics, group users into categories, invite them via **magic links**, and collect feedback in a clean, efficient, and fully traceable way—no more cluttered Google Forms.
 
 **✅ 100% Accountability** | **💬 Zero Friction** | **📨 Streamlined Process**
 
 ---
 
-## 🧪 Features
+## 🧩 How It Works
 
-- Magic link feedback submission
-- Email-based invite system
-- Category-wise email groupings
-- Clean and responsive UI
-- Admin-controlled topic and invite creation
+1. **Create a Topic** – Define what you're collecting feedback for.
+2. **Upload Emails** – Organize users with categories and CSV uploads.
+3. **Send Magic Links** – Each user gets a unique link via email.
+4. **Collect Feedback** – Authenticated users leave structured feedback.
+5. **Track Everything** – Monitor feedback, activity, and email usage from the dashboard.
 
 ---
 
-## 🔧 What's Missing / To-Do
+## 💡 What's New (Major Improvements)
 
-- 🔗 Integration with Amazon SES using a verified domain
-- 🧼 Polishing of some UI pages (still version 1)
-- 💳 Add payment gateway for future SaaS version
-- 🕵️ Add anonymous feedback option
+* 🧾 **Razorpay Integration** – Users can now subscribe to a plan via secure payments.
+* 💳 **One-Plan Subscription** – Simple, non-stackable pricing logic. Backend-secured validation.
+* 📊 **Realtime Dashboard** – View metrics like:
+
+  * Feedback received in the last 1 hour
+  * Average rating in that timeframe
+  * Emails sent per hour
+  * Upcoming plan expiry reminder
+  * Quick actions: add emails, create topics
+* 📬 **Improved Email System**
+
+  * Switched to **Resend** for better deliverability
+  * Dynamic templates via **Handlebars**
+  * Sent from your verified domain for improved trust
+  * Faster, robust sending via `Promise.all` + `transaction` logic
+  * Only **delivered emails** now count against `emailQuota`
+* ⏱️ **Email Quota System**
+
+  * Free tier with monthly quota resets
+  * Quota tracked only for successfully delivered emails
+  * Subscription check only kicks in after free tier is exhausted
+* 🛡️ **Admin Controls**
+
+  * Super admin route (easter egg: `/dashboard/admin`) to update pricing plans
+  * Access secured via `.env` `ADMIN_ID`
+
+---
+
+## 🧪 Features Overview
+
+* 🔗 Magic link-based feedback
+* ✉️ Category-wise email segmentation
+* 📦 Subscription & billing (via Razorpay)
+* 📉 Dashboard analytics for feedback + email activity
+* 🧮 Email quota and usage tracking
+* 📑 Paginated views for clean data browsing
+* 🔐 Role-based access (Admin / User)
+* 🪄 Reminder on plan expiry for users
+* 📬 Transactional email system (Resend + Handlebars)
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Frontend & Backend**: [Next.js](https://nextjs.org/)
-- **ORM**: [Prisma](https://www.prisma.io/)
-- **Database**: PostgreSQL
-- **Auth**: [Clerk](https://clerk.dev/)
-- **Emails**: Nodemailer (moving to Amazon SES)
-- **Styling**: Tailwind CSS + ShadCN UI
-- **Landing Page**: MagicUI components
+* **Frontend + Backend**: [Next.js](https://nextjs.org/)
+* **Database**: PostgreSQL
+* **ORM**: [Prisma](https://www.prisma.io/)
+* **Auth**: [Clerk](https://clerk.dev/)
+* **Emails**: Resend + Handlebars
+* **Payments**: Razorpay
+* **Styling**: Tailwind CSS + ShadCN UI
+* **Landing Page UI**: MagicUI
 
 ---
 
-## 📁 Folder Structure (Simplified)
+## 📁 Simplified Folder Structure
 
 ```
 /app
@@ -63,28 +92,38 @@ This is a feedback collection platform designed for ease and accountability. It 
 
 ---
 
+## 🗄️ Database Schema
+
+View the interactive schema on [DrawSQL](https://drawsql.app/your-project-name/diagrams/feedback-schema).
+
+---
+
 ## 🧠 Inspiration
 
-Built from a need to collect clean and traceable feedback without relying on clunky tools like Google Forms. This system allows admins to know who submitted what, making feedback loops tighter and more reliable.
+Born from the frustration of using bloated tools like Google Forms. This tool gives you full control—track **who** gave feedback and **what** they said, without friction for the users.
 
 ---
 
 ## 📈 Future Vision
 
-The platform will eventually evolve into a **SaaS** product with:
-- Subscription plans
-- Analytics for feedback
-- Role-based admin system
-- Custom domains
+The platform is shaping into a full-fledged **SaaS product** with:
+
+* Subscription plans with tier-based features
+* Analytics and insights from feedback
+* Role-based permissions
+* Custom domains for enterprise use
+* Team management and shared dashboards
 
 ---
 
 ## 🙌 Contributions
 
-If you'd like to suggest features, fix bugs, or contribute, feel free to open an issue or PR!
+Want to contribute? Feel free to open an issue, suggest a feature, or raise a PR. Always happy to collaborate!
 
 ---
 
 ## 📫 Contact
 
-Built with ❤️ by Prashant Swaroop
+Built with ❤️ by **Prashant Swaroop**
+
+Find me on [LinkedIn](https://www.linkedin.com/in/prashant-swaroop-b051141a5/) or drop a message if you want to collaborate, ask questions, or just geek out over dev tools.
