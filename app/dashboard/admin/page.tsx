@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 import { getPricingFeatures } from "@/app/action/price/pricingOps"
 import { Pricing, Feature } from "@prisma/client"
 import { auth } from "@clerk/nextjs/server"

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import addEmail from "@/app/action/addEmail";
 import EmailPagePopover from "@/components/email/emailPagePopover";
 import { Category } from "@prisma/client";
@@ -7,9 +9,9 @@ import UploadEmailCard from "@/components/email/UploadCard";
 import SearchBarWithInput from "@/components/email/SearchBarWithInputBox";
 import { SkeletonCard } from "@/components/shared/SkeltonCard";
 
-import dynamic from "next/dynamic";
+import nextDynamic from "next/dynamic";
 
-const EmailTable = dynamic(()=>import("@/components/email/TableContent"), {
+const EmailTable = nextDynamic(()=>import("@/components/email/TableContent"), {
   ssr:true,
   loading: ()=><SkeletonCard></SkeletonCard>
 })

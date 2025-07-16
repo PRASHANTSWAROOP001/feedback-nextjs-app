@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { getPricingFeatures } from "../action/price/pricingOps"
 import { Pricing, Feature } from "@prisma/client"
 
